@@ -10,7 +10,12 @@ public class TaskConfiguration : IEntityTypeConfiguration<Task>
     {
         builder.HasKey(task => task.Id);
 
-        builder.HasOne(task => task.Owner).WithMany(user => user.Tasks);
+        builder.HasOne(task => task.Owner).WithMany(user => user.Tasks)
+            .HasForeignKey("OwnerId");
+
+        builder.HasMany(task => task.SubTasks).WithOne().HasForeignKey("ParentTaskId")
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(task => task.Success);
         builder.Property(task => task.FromDate);
