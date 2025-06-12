@@ -2,9 +2,9 @@ namespace Domain.Entities;
 
 public class Task : Entity
 {
-    public ICollection<Task> SubTasks { get; set; } = [];
+    public ICollection<Task> SubTasks { get; private set; } = [];
 
-    public readonly User Owner;
+    public User Owner { get; private init; }
     public string Name { get; set; }
     public bool Success { get; set; }
 

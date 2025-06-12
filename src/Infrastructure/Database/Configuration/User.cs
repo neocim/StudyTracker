@@ -10,6 +10,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(user => user.Id);
 
-        builder.Property(user => user.Tasks);
+        builder.HasMany(user => user.Tasks).WithOne(task => task.Owner)
+            .HasForeignKey("OwnerId");
     }
 }
