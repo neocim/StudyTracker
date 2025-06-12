@@ -4,18 +4,18 @@ public class Task : Entity
 {
     public readonly ICollection<Task> SubTasks = [];
 
-    public readonly User User;
+    public readonly User Owner;
     public string Name { get; set; }
     public bool Success { get; set; }
 
     public DateOnly FromDate { get; set; }
     public DateOnly ToDate { get; set; }
 
-    public Task(Guid id, User user, DateOnly fromDate,
+    public Task(Guid id, User owner, DateOnly fromDate,
         DateOnly toDate, string? name = null, bool? success = null) : base(id)
     {
         Name = name ?? RandomName(7);
-        User = user;
+        Owner = owner;
         FromDate = fromDate;
         ToDate = toDate;
         Success = success ?? false;
