@@ -2,17 +2,20 @@ namespace Domain.Entities;
 
 public class Task : Entity
 {
-    private readonly List<Guid> _subTaskIds = [];
+    public readonly ICollection<Task> SubTasks = [];
 
-    public DateOnly FromDate { get; private set; }
-    public DateOnly ToDate { get; private set; }
-    public bool Success;
-    public string Name;
+    public readonly User User;
+    public string Name { get; set; }
+    public bool Success { get; set; }
 
-    public Task(Guid id, DateOnly fromDate,
+    public DateOnly FromDate { get; set; }
+    public DateOnly ToDate { get; set; }
+
+    public Task(Guid id, User user, DateOnly fromDate,
         DateOnly toDate, string? name = null, bool? success = null) : base(id)
     {
         Name = name ?? RandomName(7);
+        User = user;
         FromDate = fromDate;
         ToDate = toDate;
         Success = success ?? false;

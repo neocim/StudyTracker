@@ -2,7 +2,7 @@ namespace Domain.Entities;
 
 public class User : Entity
 {
-    private List<Guid> _userTaskIds = [];
+    public readonly ICollection<Task> UserTasks = [];
 
     public User(Guid id) : base(id)
     {
