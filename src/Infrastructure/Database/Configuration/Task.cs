@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Task = Domain.Entities.Task;
-using Domain.Entities;
 
 namespace Infrastructure.Database.Configuration;
 
