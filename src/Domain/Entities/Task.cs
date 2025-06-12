@@ -1,29 +1,21 @@
 namespace Domain.Entities;
 
-public abstract class Task : Entity
+public class Task : Entity
 {
-    private protected DateOnly FromDate;
-    private protected DateOnly ToDate;
-    public bool Success;
+    private readonly List<Guid> _subTaskIds = [];
 
-    protected Task(Guid id, DateOnly fromDate, DateOnly toDate, bool? success = null) :
-        base(id)
+    public DateOnly FromDate { get; private set; }
+    public DateOnly ToDate { get; private set; }
+    public bool Success;
+    public string Name;
+
+    public Task(Guid id, DateOnly fromDate,
+        DateOnly toDate, string? name = null, bool? success = null) : base(id)
     {
+        Name = name ?? RandomName(7);
         FromDate = fromDate;
         ToDate = toDate;
         Success = success ?? false;
-    }
-}
-
-public class MainTask : Task
-{
-    private readonly List<Guid> _subTaskIds = [];
-    public string Name;
-
-    public MainTask(Guid id, DateOnly fromDate,
-        DateOnly toDate, string? name = null) : base(id, fromDate, toDate)
-    {
-        Name = name ?? RandomName(7);
     }
 
     private static string RandomName(int length)
