@@ -1,20 +1,29 @@
 namespace Domain.Entities;
 
-public class Task : Entity
+public abstract class Task : Entity
+{
+    private protected DateOnly FromDate;
+    private protected DateOnly ToDate;
+    public bool Success;
+
+    protected Task(Guid id, DateOnly fromDate, DateOnly toDate, bool? success = null) :
+        base(id)
+    {
+        FromDate = fromDate;
+        ToDate = toDate;
+        Success = success ?? false;
+    }
+}
+
+public class MainTask : Task
 {
     private readonly List<Guid> _subTaskIds = [];
-    private DateOnly TaskBeginTime;
-    private DateOnly TaskEndTime;
+    public string Name;
 
-    public string TaskName = null!;
-    public bool Success = false;
-
-    public Task(Guid id, DateOnly taskBeginTime,
-        DateOnly taskEndTime, string? taskName = null) : base(id)
+    public MainTask(Guid id, DateOnly fromDate,
+        DateOnly toDate, string? name = null) : base(id, fromDate, toDate)
     {
-        TaskBeginTime = taskBeginTime;
-        TaskEndTime = taskEndTime;
-        TaskName = taskName ?? RandomName(7);
+        Name = name ?? RandomName(7);
     }
 
     private static string RandomName(int length)
@@ -23,15 +32,5 @@ public class Task : Entity
         var random = new Random();
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
-}
-
-public class SubTask : Entity
-{
-    private DateOnly TaskBeginTime;
-    private DateOnly TaskEndTime;
-
-    public SubTask(Guid id) : base(id)
-    {
     }
 }
