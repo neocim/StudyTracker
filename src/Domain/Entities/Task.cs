@@ -5,20 +5,22 @@ public class Task : Entity
     public ICollection<Task> SubTasks { get; private set; } = [];
 
     public User Owner { get; private init; }
+    public Guid OwnerId { get; private init; }
+
     public string Name { get; set; }
     public bool Success { get; set; }
 
     public DateOnly FromDate { get; set; }
     public DateOnly ToDate { get; set; }
 
-    public Task(Guid id, User owner, DateOnly fromDate,
-        DateOnly toDate, string? name = null, bool? success = null) : base(id)
+    public Task(Guid id, Guid ownerId, DateOnly fromDate,
+        DateOnly toDate, string? name = null, bool success = false) : base(id)
     {
         Name = name ?? RandomName(7);
-        Owner = owner;
+        OwnerId = ownerId;
         FromDate = fromDate;
         ToDate = toDate;
-        Success = success ?? false;
+        Success = success;
     }
 
     private static string RandomName(int length)
