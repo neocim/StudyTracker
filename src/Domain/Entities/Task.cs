@@ -4,8 +4,8 @@ public class Task : Entity
 {
     public ICollection<Task> SubTasks { get; private set; } = [];
 
-    public User Owner { get; private init; }
-    public Guid OwnerId { get; private init; }
+    public User Owner { get; init; }
+    public Guid OwnerId { get; init; }
 
     public string Name { get; set; }
     public bool Success { get; set; }
@@ -13,11 +13,11 @@ public class Task : Entity
     public DateOnly FromDate { get; set; }
     public DateOnly ToDate { get; set; }
 
-    public Task(Guid id, Guid ownerId, DateOnly fromDate,
-        DateOnly toDate, string? name = null, bool success = false) : base(id)
+    public Task(Guid id, DateOnly fromDate,
+        DateOnly toDate, string? name = null,
+        bool success = false) : base(id)
     {
         Name = name ?? RandomName(7);
-        OwnerId = ownerId;
         FromDate = fromDate;
         ToDate = toDate;
         Success = success;
