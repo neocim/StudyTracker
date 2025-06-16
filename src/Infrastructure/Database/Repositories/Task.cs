@@ -4,34 +4,34 @@ using Entity = Domain.Entities;
 
 namespace Infrastructure.Database.Repositories;
 
-public class TaskRepository(ApplicationDbContext _applicationDbContext) : ITaskRepository
+public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRepository
 {
     public async Task AddAsync(Entity.Task task)
     {
-        await _applicationDbContext.AddAsync(task);
-        await _applicationDbContext.SaveChangesAsync();
+        await applicationDbContext.AddAsync(task);
+        await applicationDbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Entity.Task task)
     {
-        _applicationDbContext.Update(task);
-        await _applicationDbContext.SaveChangesAsync();
+        applicationDbContext.Update(task);
+        await applicationDbContext.SaveChangesAsync();
     }
 
     public async Task RemoveAsync(Entity.Task task)
     {
-        _applicationDbContext.Remove(task);
-        await _applicationDbContext.SaveChangesAsync();
+        applicationDbContext.Remove(task);
+        await applicationDbContext.SaveChangesAsync();
     }
 
     public async Task<Entity.Task?> GetByIdAsync(Guid taskId)
     {
-        return await _applicationDbContext.FindAsync<Entity.Task>(taskId);
+        return await applicationDbContext.FindAsync<Entity.Task>(taskId);
     }
 
     public async Task<ICollection<Entity.Task>?> GetListByOwnerIdAsync(Guid ownerId)
     {
-        return await _applicationDbContext.Tasks.AsNoTracking()
+        return await applicationDbContext.Tasks.AsNoTracking()
             .Where(task => task.OwnerId == ownerId)
             .ToListAsync();
     }
