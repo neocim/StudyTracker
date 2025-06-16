@@ -1,5 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+using Application.Repositories;
 using Infrastructure.Database;
+using Infrastructure.Database.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
@@ -11,6 +13,9 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
         );
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITaskRepository, TaskRepository>();
 
         return services;
     }
