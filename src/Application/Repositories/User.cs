@@ -6,6 +6,6 @@ namespace Application.Repositories;
 public interface IUserRepository
 {
     Task AddAsync(User user);
-    Task AddTaskAsync(User user, Entity.Task task);
+    Task UpdateAsync(User user);
     Task<User?> GetByIdAsync(Guid userId);
 }

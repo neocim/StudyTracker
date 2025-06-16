@@ -2,7 +2,7 @@ namespace Api;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPresentation(this IServiceCollection services)
+    public static IServiceCollection AddApi(this IServiceCollection services)
     {
         services.AddControllers();
 
