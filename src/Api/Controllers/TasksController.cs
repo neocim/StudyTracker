@@ -1,3 +1,4 @@
+using Application.Cqrs.Commands.Task;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Task = Domain.Entities.Task;
@@ -9,11 +10,11 @@ namespace Api.Controllers;
 [Route("task")]
 public class TasksController(Mediator mediator) : ApiController
 {
-    [HttpGet("new")]
-    public async Task<IActionResult> NewTask(ApplicationDbContext context)
-    {
-        var taskId = Guid.NewGuid();
-    }
+    // [HttpPost("new")]
+    // public async Task<IActionResult> NewTask(ApplicationDbContext context)
+    // {
+    //     var taskId = new Task(Guid.NewGuid(), DateOnly.MinValue, DateOnly.MaxValue);
+    // }
 
     [HttpGet("{taskId:guid}")]
     public async Task<IActionResult> GetTask(Guid taskId, ApplicationDbContext context)
