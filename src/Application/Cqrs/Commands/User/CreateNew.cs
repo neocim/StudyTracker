@@ -3,7 +3,7 @@ using Entity = Domain.Entities;
 using ErrorOr;
 using MediatR;
 
-namespace Application.Cqrs.Queries.User;
+namespace Application.Cqrs.Commands.User;
 
 public record CreateNewUserCommand(Entity.User User) : IRequest<ErrorOr<Success>>;
 

@@ -2,7 +2,7 @@ namespace Domain.Entities;
 
 public class Task : Entity
 {
-    public ICollection<Task> SubTasks { get; private set; } = [];
+    public ICollection<Task> SubTasks { get; } = [];
 
     public User Owner { get; init; }
     public Guid OwnerId { get; init; }
@@ -21,6 +21,11 @@ public class Task : Entity
         FromDate = fromDate;
         ToDate = toDate;
         Success = success;
+    }
+
+    public void AddSubTask(Task subTask)
+    {
+        SubTasks.Add(subTask);
     }
 
     private static string RandomName(int length)

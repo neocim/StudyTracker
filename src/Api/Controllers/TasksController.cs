@@ -2,24 +2,17 @@ using Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Task = Domain.Entities.Task;
 using Domain.Entities;
+using MediatR;
 
 namespace Api.Controllers;
 
 [Route("task")]
-public class TasksController : ApiController
+public class TasksController(Mediator mediator) : ApiController
 {
     [HttpGet("new")]
     public async Task<IActionResult> NewTask(ApplicationDbContext context)
     {
-        var guid = Guid.NewGuid();
-        var uguid = Guid.NewGuid();
-        var user = new User(uguid);
-        var task = new Task(guid,
-            DateOnly.MaxValue,
-            DateOnly.MinValue) { Owner = user };
-        await context.AddAsync(task);
-        await context.SaveChangesAsync();
-        return Content($"New task with guid \n{guid}\nand user guid\n{uguid}");
+        var taskId = Guid.NewGuid();
     }
 
     [HttpGet("{taskId:guid}")]

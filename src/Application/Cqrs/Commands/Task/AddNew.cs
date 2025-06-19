@@ -3,9 +3,10 @@ using ErrorOr;
 using MediatR;
 using Entity = Domain.Entities;
 
-namespace Application.Cqrs.Queries.Task;
+namespace Application.Cqrs.Commands.Task;
 
-public record AddNewTaskCommand(Entity.Task Task, Guid UserId) : IRequest<ErrorOr<Success>>;
+public record AddNewTaskCommand(Entity.Task Task, Guid UserId)
+    : IRequest<ErrorOr<Success>>;
 
 public class AddNewTaskCommandHandler(IUserRepository userRepository)
     : IRequestHandler<AddNewTaskCommand, ErrorOr<Success>>
@@ -15,7 +16,8 @@ public class AddNewTaskCommandHandler(IUserRepository userRepository)
     {
         var user = await userRepository.GetByIdAsync(request.UserId);
 
-        if (user is null) return Error.NotFound($"User with ID `{request.UserId}` doesn't exist");
+        if (user is null)
+            return Error.NotFound($"User with ID `{request.UserId}` doesn't exist");
 
         user.AddTask(request.Task);
         await userRepository.UpdateAsync(user);
