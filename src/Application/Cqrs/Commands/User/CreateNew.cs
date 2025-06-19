@@ -5,12 +5,12 @@ using MediatR;
 
 namespace Application.Cqrs.Commands.User;
 
-public record CreateNewUserCommand(Entity.User User) : IRequest<ErrorOr<Success>>;
+public record CreateNewUserCommand(Entity.User User) : IRequest<ErrorOr<Created>>;
 
 public class CreateNewUserCommandHandler(IUserRepository userRepository)
-    : IRequestHandler<CreateNewUserCommand, ErrorOr<Success>>
+    : IRequestHandler<CreateNewUserCommand, ErrorOr<Created>>
 {
-    public async Task<ErrorOr<Success>> Handle(CreateNewUserCommand request,
+    public async Task<ErrorOr<Created>> Handle(CreateNewUserCommand request,
         CancellationToken cancellationToken)
     {
         if (await userRepository.GetByIdAsync(request.User.Id) is not null)
@@ -18,6 +18,6 @@ public class CreateNewUserCommandHandler(IUserRepository userRepository)
 
         await userRepository.AddAsync(request.User);
 
-        return Result.Success;
+        return Result.Created;
     }
 }
