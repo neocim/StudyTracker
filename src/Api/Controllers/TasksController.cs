@@ -1,4 +1,4 @@
-using Api.Requests;
+using Api.Dto.Requests;
 using Application.Cqrs.Commands.Task;
 using Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +21,13 @@ public class TasksController(Mediator mediator) : ApiController
             request.Description, request.Name, request.Success);
 
         var command = new AddNewTaskCommand(request.OwnerId, task);
-        var result = mediator.Send(command);
+        var result = await mediator.Send(command);
+
+        return result.Match(success => Ok(), Error);
     }
 
     [HttpGet("{taskId:guid}")]
-    public async Task<IActionResult> GetTask(Guid taskId)
+    public async Task<ActionResult> GetTask(Guid taskId)
     {
     }
 }

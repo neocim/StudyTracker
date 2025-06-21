@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Api.Requests;
+namespace Api.Dto;
 
 public class DateOnlyJsonConverter : JsonConverter<DateOnly>
 {

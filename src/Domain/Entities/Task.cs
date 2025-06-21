@@ -9,20 +9,20 @@ public class Task : Entity
 
     public string Name { get; set; }
     public string? Description { get; set; }
-    public bool Success { get; set; }
+    public bool? Success { get; set; }
 
     public DateOnly FromDate { get; set; }
     public DateOnly ToDate { get; set; }
 
     public Task(Guid id, DateOnly fromDate,
         DateOnly toDate, string? description = null, string? name = null,
-        bool success = false) : base(id)
+        bool? success = null) : base(id)
     {
         Name = name ?? RandomName(7);
         Description = description;
+        Success = success;
         FromDate = fromDate;
         ToDate = toDate;
-        Success = success;
     }
 
     public void AddSubTask(Task subTask)

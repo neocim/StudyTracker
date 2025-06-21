@@ -5,7 +5,7 @@ using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddNewTaskCommand(Entity.Task Task, Guid UserId)
+public record AddNewTaskCommand(Guid UserId, Entity.Task Task)
     : IRequest<ErrorOr<Success>>;
 
 public class AddNewTaskCommandHandler(IUserRepository userRepository)
