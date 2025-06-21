@@ -23,7 +23,7 @@ public class TasksController(Mediator mediator) : ApiController
         var command = new AddNewTaskCommand(request.OwnerId, task);
         var result = await mediator.Send(command);
 
-        return result.Match(success => Ok(), Error);
+        return result.Match(created => Ok(), Error);
     }
 
     [HttpGet("{taskId:guid}")]

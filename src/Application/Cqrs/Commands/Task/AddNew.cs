@@ -6,12 +6,12 @@ using Entity = Domain.Entities;
 namespace Application.Cqrs.Commands.Task;
 
 public record AddNewTaskCommand(Guid UserId, Entity.Task Task)
-    : IRequest<ErrorOr<Success>>;
+    : IRequest<ErrorOr<Created>>;
 
 public class AddNewTaskCommandHandler(IUserRepository userRepository)
-    : IRequestHandler<AddNewTaskCommand, ErrorOr<Success>>
+    : IRequestHandler<AddNewTaskCommand, ErrorOr<Created>>
 {
-    public async Task<ErrorOr<Success>> Handle(AddNewTaskCommand request,
+    public async Task<ErrorOr<Created>> Handle(AddNewTaskCommand request,
         CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(request.UserId);
@@ -22,6 +22,6 @@ public class AddNewTaskCommandHandler(IUserRepository userRepository)
         user.AddTask(request.Task);
         await userRepository.UpdateAsync(user);
 
-        return Result.Success;
+        return Result.Created;
     }
 }
