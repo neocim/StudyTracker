@@ -1,16 +1,16 @@
+using Application.Dto.User;
 using Application.Repositories;
 using MediatR;
-using Entity = Domain.Entities;
 using ErrorOr;
 
 namespace Application.Cqrs.Queries.User;
 
-public record GetUserByIdQuery(Guid UserId) : IRequest<ErrorOr<Entity.User>>;
+public record GetUserByIdQuery(Guid UserId) : IRequest<ErrorOr<UserResult>>;
 
 public class GetUserByIdQueryHandler(IUserRepository userRepository)
-    : IRequestHandler<GetUserByIdQuery, ErrorOr<Entity.User>>
+    : IRequestHandler<GetUserByIdQuery, ErrorOr<UserResult>>
 {
-    public async Task<ErrorOr<Entity.User>> Handle(GetUserByIdQuery request,
+    public async Task<ErrorOr<UserResult>> Handle(GetUserByIdQuery request,
         CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(request.UserId);
@@ -18,6 +18,6 @@ public class GetUserByIdQueryHandler(IUserRepository userRepository)
         if (user is null)
             return Error.NotFound($"User with ID `{request.UserId}` doesn't exist");
 
-        return user;
+        return UserResult.FromUser(user);
     }
 }

@@ -1,16 +1,16 @@
+using Application.Dto.Task;
 using Application.Repositories;
 using MediatR;
 using ErrorOr;
-using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Queries.Task;
 
-public record GetTaskByIdQuery(Guid TaskId) : IRequest<ErrorOr<Entity.Task>>;
+public record GetTaskByIdQuery(Guid TaskId) : IRequest<ErrorOr<TaskResult>>;
 
 public class GetTaskByIdQueryHandler(ITaskRepository taskRepository)
-    : IRequestHandler<GetTaskByIdQuery, ErrorOr<Entity.Task>>
+    : IRequestHandler<GetTaskByIdQuery, ErrorOr<TaskResult>>
 {
-    public async Task<ErrorOr<Entity.Task>> Handle(GetTaskByIdQuery request,
+    public async Task<ErrorOr<TaskResult>> Handle(GetTaskByIdQuery request,
         CancellationToken cancellationToken)
     {
         var task = await taskRepository.GetByIdAsync(request.TaskId);
@@ -18,6 +18,6 @@ public class GetTaskByIdQueryHandler(ITaskRepository taskRepository)
         if (task is null)
             return Error.NotFound($"Task with ID `{request.TaskId}` doesn't exist");
 
-        return task;
+        return TaskResult.FromTask(task);
     }
 }

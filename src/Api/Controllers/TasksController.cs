@@ -1,6 +1,7 @@
 using Api.Dto.Requests.Task;
 using Application.Cqrs.Commands.Task;
 using Application.Cqrs.Queries.Task;
+using Application.Dto.Task;
 using Microsoft.AspNetCore.Mvc;
 using Entity = Domain.Entities;
 using MediatR;
@@ -25,7 +26,7 @@ public class TasksController(Mediator mediator) : ApiController
     }
 
     [HttpGet("{taskId:guid}")]
-    public async Task<ActionResult<Entity.Task>> GetTask(HttpContext context)
+    public async Task<ActionResult<TaskResult>> GetTask(HttpContext context)
     {
         var request = await context.Request.ReadFromJsonAsync<GetTaskRequest>();
 

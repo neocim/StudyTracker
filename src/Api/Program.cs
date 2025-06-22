@@ -9,10 +9,6 @@ var app = builder.Build();
 
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+if (app.Environment.IsDevelopment()) app.UseSwagger().UseSwaggerUI();
 
 app.Run();
