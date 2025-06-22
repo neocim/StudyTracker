@@ -1,10 +1,8 @@
-using Api.Dto.Requests;
+using Api.Dto.Requests.Task;
 using Application.Cqrs.Commands.Task;
-using Infrastructure.Database;
+using Application.Cqrs.Queries.Task;
 using Microsoft.AspNetCore.Mvc;
 using Entity = Domain.Entities;
-using Domain.Entities;
-using ErrorOr;
 using MediatR;
 
 namespace Api.Controllers;
@@ -27,7 +25,13 @@ public class TasksController(Mediator mediator) : ApiController
     }
 
     [HttpGet("{taskId:guid}")]
-    public async Task<ActionResult> GetTask(Guid taskId)
+    public async Task<ActionResult<Entity.Task>> GetTask(HttpContext context)
     {
+        var request = await context.Request.ReadFromJsonAsync<GetTaskRequest>();
+
+        var query = new GetTaskByIdQuery(Guid.Parse(request!.TaskId));
+        var result = await mediator.Send(query);
+
+        return result.Match(task => Ok(task), Error);
     }
 }

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Api.Dto.Requests;
+namespace Api.Dto.Requests.Task;
 
 public record NewTaskRequest
 {
