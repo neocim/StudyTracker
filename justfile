@@ -6,7 +6,7 @@ run-db:
         -e POSTGRES_DB=db \
         postgres:17-alpine
 
-run-migration migrationName:
+run-mgrt migrationName:
     dotnet-ef migrations add {{migrationName}} --project=src/Infrastructure/ --startup-project=src/Api/
 
 upd-db:
