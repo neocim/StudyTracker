@@ -9,6 +9,7 @@ var app = builder.Build();
 
 app.MapControllers();
 
-if (app.Environment.IsDevelopment()) app.UseSwagger().UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+    app.UseSwagger().UseSwaggerUI(config => config.EnableTryItOutByDefault());
 
 app.Run();

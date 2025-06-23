@@ -14,7 +14,8 @@ public class CreateNewUserCommandHandler(IUserRepository userRepository)
         CancellationToken cancellationToken)
     {
         if (await userRepository.GetByIdAsync(request.User.Id) is not null)
-            return Error.Conflict($"User with ID `{request.User.Id}` already exists");
+            return Error.Conflict(
+                description: $"User with ID `{request.User.Id}` already exists");
 
         await userRepository.AddAsync(request.User);
 

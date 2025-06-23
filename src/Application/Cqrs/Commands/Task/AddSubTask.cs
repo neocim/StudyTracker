@@ -17,7 +17,8 @@ public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
         var task = await taskRepository.GetByIdAsync(request.TaskId);
 
         if (task is null)
-            return Error.NotFound($"Task with ID `{request.TaskId}` doesn't exist");
+            return Error.NotFound(
+                description: $"Task with ID `{request.TaskId}` doesn't exist");
 
         task.AddSubTask(request.SubTask);
         await taskRepository.UpdateAsync(task);

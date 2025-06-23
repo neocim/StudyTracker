@@ -17,7 +17,8 @@ public class AddNewTaskCommandHandler(IUserRepository userRepository)
         var user = await userRepository.GetByIdAsync(request.UserId);
 
         if (user is null)
-            return Error.NotFound($"User with ID `{request.UserId}` doesn't exist");
+            return Error.NotFound(
+                description: $"User with ID `{request.UserId}` doesn't exist");
 
         user.AddTask(request.Task);
         await userRepository.UpdateAsync(user);
