@@ -11,18 +11,18 @@ public class Task : Entity
     public string? Description { get; set; }
     public bool? Success { get; set; }
 
-    public DateOnly FromDate { get; set; }
-    public DateOnly ToDate { get; set; }
+    public DateOnly BeginDate { get; set; }
+    public DateOnly EndDate { get; set; }
 
-    public Task(Guid id, DateOnly fromDate,
-        DateOnly toDate, string? description = null, string? name = null,
+    public Task(Guid id, DateOnly beginDate,
+        DateOnly endDate, string? description = null, string? name = null,
         bool? success = null) : base(id)
     {
         Name = name ?? RandomName(7);
         Description = description;
         Success = success;
-        FromDate = fromDate;
-        ToDate = toDate;
+        BeginDate = BeginDate;
+        EndDate = EndDate;
     }
 
     public void AddSubTask(Task subTask)

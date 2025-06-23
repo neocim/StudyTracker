@@ -31,8 +31,8 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Success = table.Column<bool>(type: "boolean", nullable: true),
-                    FromDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    ToDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    BeginDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     ParentTaskId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>

@@ -5,12 +5,12 @@ public record TaskResult(
     string Name,
     string? Description,
     bool? Success,
-    DateOnly FromDate,
-    DateOnly ToDate)
+    DateOnly BeginDate,
+    DateOnly EndDate)
 {
     public static TaskResult FromTask(Domain.Entities.Task task)
     {
         return new TaskResult(task.OwnerId, task.Name,
-            task.Description, task.Success, task.FromDate, task.ToDate);
+            task.Description, task.Success, task.BeginDate, task.EndDate);
     }
 }

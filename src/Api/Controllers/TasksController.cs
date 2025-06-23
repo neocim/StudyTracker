@@ -15,7 +15,7 @@ public class TasksController(IMediator mediator) : ApiController
     [HttpPost]
     public async Task<ActionResult<TaskCreatedResult>> NewTask(NewTaskRequest request)
     {
-        var task = new Entity.Task(request!.OwnerId, request.FromDate, request.ToDate,
+        var task = new Entity.Task(request!.OwnerId, request.BeginDate, request.EndDate,
             request.Description, request.Name);
 
         var command = new AddNewTaskCommand(request.OwnerId, task);

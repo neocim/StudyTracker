@@ -15,10 +15,10 @@ public record NewTaskRequest
     [Required(ErrorMessage = "The task begin date is required")]
     [JsonConverter(typeof(DateOnlyJsonConverter))]
     [DateRange]
-    public DateOnly FromDate { get; set; }
+    public DateOnly BeginDate { get; set; }
 
     [Required(ErrorMessage = "The task end date is required")]
     [JsonConverter(typeof(DateOnlyJsonConverter))]
     [DateRange]
-    public DateOnly ToDate { get; set; }
+    public DateOnly EndDate { get; set; }
 }

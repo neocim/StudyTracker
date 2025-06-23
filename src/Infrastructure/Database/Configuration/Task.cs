@@ -17,9 +17,9 @@ public class TaskConfiguration : IEntityTypeConfiguration<Task>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(task => task.Name);
-        builder.Property(task => task.Description);
-        builder.Property(task => task.Success);
-        builder.Property(task => task.FromDate);
-        builder.Property(task => task.ToDate);
+        builder.Property(task => task.Description).HasDefaultValue(null);
+        builder.Property(task => task.Success).HasDefaultValue(null);
+        builder.Property(task => task.BeginDate);
+        builder.Property(task => task.EndDate);
     }
 }

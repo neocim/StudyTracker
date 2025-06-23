@@ -28,10 +28,13 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateOnly>("BeginDate")
+                        .HasColumnType("date");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("FromDate")
+                    b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Name")
@@ -46,9 +49,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool?>("Success")
                         .HasColumnType("boolean");
-
-                    b.Property<DateOnly>("ToDate")
-                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
