@@ -1,5 +1,4 @@
 using User = Domain.Entities.User;
-using Entity = Domain.Entities;
 
 namespace Application.Repositories;
 
