@@ -5,7 +5,7 @@ using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddSubTaskCommand(Guid MainTaskId, Entity.Task SubTask)
+public record AddSubTaskCommand(Guid ParentTaskId, Entity.Task SubTask)
     : IRequest<ErrorOr<Created>>;
 
 public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
@@ -14,11 +14,11 @@ public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
     public async Task<ErrorOr<Created>> Handle(AddSubTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var task = await taskRepository.GetByIdAsync(request.MainTaskId);
+        var task = await taskRepository.GetByIdAsync(request.ParentTaskId);
 
         if (task is null)
             return Error.NotFound(
-                description: $"Task with ID `{request.MainTaskId}` doesn't exist");
+                description: $"Task with ID `{request.ParentTaskId}` doesn't exist");
 
         task.AddSubTask(request.SubTask);
         await taskRepository.UpdateAsync(task);

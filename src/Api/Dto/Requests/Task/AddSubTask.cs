@@ -7,7 +7,7 @@ namespace Api.Dto.Requests.Task;
 public record AddSubTaskRequest
 {
     [Required(ErrorMessage = "The ID of the main task is required")]
-    public Guid MainTaskId { get; set; }
+    public Guid ParentTaskId { get; set; }
 
     [DefaultValue(null)] public string? Name { get; set; }
     [DefaultValue(null)] public string? Description { get; set; }

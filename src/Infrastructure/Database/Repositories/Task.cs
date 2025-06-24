@@ -1,5 +1,4 @@
 using Application.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Entity = Domain.Entities;
 
 namespace Infrastructure.Database.Repositories;
