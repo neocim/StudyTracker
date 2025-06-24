@@ -25,7 +25,7 @@ public class TaskController(IMediator mediator) : ApiController
         return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
     }
 
-    [HttpPost("addsubtask")]
+    [HttpPost("add_subtask")]
     public async Task<ActionResult<TaskCreatedResponse>> AddSubTask(
         AddSubTaskRequest request)
     {
@@ -36,6 +36,15 @@ public class TaskController(IMediator mediator) : ApiController
         var result = await mediator.Send(command);
 
         return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
+    }
+
+    [HttpPost("update_status")]
+    public async Task<ActionResult> UpdateTaskStatus(UpdateTaskStatusRequest request)
+    {
+        var command = new UpdateTaskStatusCommand(request.TaskId, request.Success);
+        var result = await mediator.Send(command);
+
+        return result.Match(_ => Ok(), Error);
     }
 
     [HttpGet("{taskId:guid}")]

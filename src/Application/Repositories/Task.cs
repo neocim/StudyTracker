@@ -9,5 +9,4 @@ public interface ITaskRepository
     Task RemoveAsync(Entity.Task task);
 
     Task<Entity.Task?> GetByIdAsync(Guid taskId);
-    Task<ICollection<Entity.Task>?> GetListByOwnerIdAsync(Guid ownerId);
 }

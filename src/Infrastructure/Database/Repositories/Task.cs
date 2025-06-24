@@ -28,11 +28,4 @@ public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRe
     {
         return await applicationDbContext.FindAsync<Entity.Task>(taskId);
     }
-
-    public async Task<ICollection<Entity.Task>?> GetListByOwnerIdAsync(Guid ownerId)
-    {
-        return await applicationDbContext.Tasks.AsNoTracking()
-            .Where(task => task.OwnerId == ownerId)
-            .ToListAsync();
-    }
 }
