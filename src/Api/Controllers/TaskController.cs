@@ -15,10 +15,24 @@ public class TaskController(IMediator mediator) : ApiController
     [HttpPost]
     public async Task<ActionResult<TaskCreatedResponse>> NewTask(NewTaskRequest request)
     {
-        var task = new Entity.Task(request!.OwnerId, request.BeginDate, request.EndDate,
-            request.Description, request.Name);
+        var task = new Entity.Task(Guid.NewGuid(), request.BeginDate,
+            request.EndDate,
+            request.Description, request.Name, request.Success);
 
         var command = new AddNewTaskCommand(request.OwnerId, task);
+        var result = await mediator.Send(command);
+
+        return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<TaskCreatedResponse>> AddSubTask(
+        AddSubTaskRequest request)
+    {
+        var task = new Entity.Task(Guid.NewGuid(), request.BeginDate, request.EndDate,
+            request.Description, request.Name, request.Success);
+
+        var command = new AddSubTaskCommand(request.MainTaskId, task);
         var result = await mediator.Send(command);
 
         return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
