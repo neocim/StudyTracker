@@ -12,7 +12,7 @@ namespace Api.Controllers;
 [Route("task")]
 public class TaskController(IMediator mediator) : ApiController
 {
-    [HttpPost]
+    [HttpPost("new")]
     public async Task<ActionResult<TaskCreatedResponse>> NewTask(NewTaskRequest request)
     {
         var task = new Entity.Task(Guid.NewGuid(), request.BeginDate,
@@ -25,7 +25,7 @@ public class TaskController(IMediator mediator) : ApiController
         return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
     }
 
-    [HttpPost]
+    [HttpPost("addsubtask")]
     public async Task<ActionResult<TaskCreatedResponse>> AddSubTask(
         AddSubTaskRequest request)
     {
