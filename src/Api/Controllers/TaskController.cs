@@ -12,7 +12,7 @@ namespace Api.Controllers;
 [Route("task")]
 public class TaskController(IMediator mediator) : ApiController
 {
-    [HttpPost("new")]
+    [HttpPost]
     public async Task<ActionResult<TaskCreatedResponse>> NewTask(NewTaskRequest request)
     {
         var task = new Entity.Task(Guid.NewGuid(), request.BeginDate,
@@ -25,7 +25,7 @@ public class TaskController(IMediator mediator) : ApiController
         return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
     }
 
-    [HttpPost("add_subtask")]
+    [HttpPost("subtask")]
     public async Task<ActionResult<TaskCreatedResponse>> AddSubTask(
         AddSubTaskRequest request)
     {
@@ -38,10 +38,11 @@ public class TaskController(IMediator mediator) : ApiController
         return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
     }
 
-    [HttpPost("update_status")]
-    public async Task<ActionResult> UpdateTaskStatus(UpdateTaskStatusRequest request)
+    [HttpPatch]
+    public async Task<ActionResult> UpdateTask(UpdateTaskRequest request)
     {
-        var command = new UpdateTaskStatusCommand(request.TaskId, request.Success);
+        var command = new UpdateTaskCommand(request.TaskId, request.Success, request.Name,
+            request.Description);
         var result = await mediator.Send(command);
 
         return result.Match(_ => Ok(), Error);
