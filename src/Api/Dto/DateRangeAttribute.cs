@@ -1,3 +1,6 @@
+// Now i don't think i should put a limit on the range of dates, then i dont use it,
+// but i left it if i need it in the future.
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Api.Dto;

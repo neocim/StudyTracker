@@ -5,12 +5,6 @@ namespace Infrastructure.Database.Repositories;
 
 public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRepository
 {
-    public async Task AddAsync(Entity.Task task)
-    {
-        await applicationDbContext.AddAsync(task);
-        await applicationDbContext.SaveChangesAsync();
-    }
-
     public async Task UpdateAsync(Entity.Task task)
     {
         applicationDbContext.Update(task);

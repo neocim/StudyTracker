@@ -9,17 +9,15 @@ public record NewTaskRequest
     [Required(ErrorMessage = "The ID of the user who will own the new task is required")]
     public Guid OwnerId { get; set; }
 
-    [DefaultValue(null)] public string? Name { get; set; }
-    [DefaultValue(null)] public string? Description { get; set; }
-    [DefaultValue(null)] public bool? Success { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public bool? Success { get; set; }
 
     [Required(ErrorMessage = "The task begin date is required")]
     [JsonConverter(typeof(DateOnlyJsonConverter))]
-    [DateRange]
     public DateOnly BeginDate { get; set; }
 
     [Required(ErrorMessage = "The task end date is required")]
     [JsonConverter(typeof(DateOnlyJsonConverter))]
-    [DateRange]
     public DateOnly EndDate { get; set; }
 }
