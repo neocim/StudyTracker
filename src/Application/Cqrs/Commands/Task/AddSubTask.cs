@@ -2,7 +2,6 @@ using Application.Dto.Task;
 using Application.Repositories;
 using MediatR;
 using ErrorOr;
-using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
 
