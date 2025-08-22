@@ -1,14 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Task = Domain.Entities.Task;
+using Entity = Domain.Entities;
 
 namespace Infrastructure.Database.Configuration;
 
-public class TaskConfiguration : IEntityTypeConfiguration<Task>
+public class TaskConfiguration : IEntityTypeConfiguration<Entity.Task>
 {
-    public void Configure(EntityTypeBuilder<Task> builder)
+    public void Configure(EntityTypeBuilder<Entity.Task> builder)
     {
         builder.HasKey(task => task.Id);
+        builder.Property(task => task.OwnerId).IsRequired();
+        builder.HasIndex(task => task.OwnerId);
 
         builder
             .HasMany(task => task.SubTasks).WithOne()

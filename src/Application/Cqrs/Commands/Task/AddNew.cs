@@ -5,23 +5,16 @@ using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddNewTaskCommand(Guid UserId, Entity.Task Task)
+public record AddNewTaskCommand(Entity.Task Task)
     : IRequest<ErrorOr<Created>>;
 
-public class AddNewTaskCommandHandler(IUserRepository userRepository)
+public class AddNewTaskCommandHandler(ITaskRepository taskRepository)
     : IRequestHandler<AddNewTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(AddNewTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(request.UserId);
-
-        if (user is null)
-            return Error.NotFound(
-                description: $"User with ID `{request.UserId}` doesn't exist");
-
-        user.AddTask(request.Task);
-        await userRepository.UpdateAsync(user);
+        await taskRepository.UpdateAsync(request.Task);
 
         return Result.Created;
     }

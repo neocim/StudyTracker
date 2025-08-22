@@ -15,27 +15,28 @@ public class TaskController(IMediator mediator) : ApiController
     [HttpPost]
     public async Task<ActionResult<TaskCreatedResponse>> NewTask(NewTaskRequest request)
     {
-        var task = new Entity.Task(Guid.NewGuid(), request.BeginDate,
+        var task = new Entity.Task(Guid.NewGuid(), request.OwnerId, request.BeginDate,
             request.EndDate,
             request.Description, request.Name, request.Success);
 
-        var command = new AddNewTaskCommand(request.OwnerId, task);
+        var command = new AddNewTaskCommand(task);
         var result = await mediator.Send(command);
 
-        return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
+        return result.Match(_ => Ok(TaskCreatedResponse.FromTaskEntity(task)), Error);
     }
 
     [HttpPost("subtask")]
     public async Task<ActionResult<TaskCreatedResponse>> AddSubTask(
         AddSubTaskRequest request)
     {
-        var task = new Entity.Task(Guid.NewGuid(), request.BeginDate, request.EndDate,
+        var subTask = new SubTask(Guid.NewGuid(), request.BeginDate,
+            request.EndDate,
             request.Description, request.Name, request.Success);
 
-        var command = new AddSubTaskCommand(request.ParentTaskId, task);
+        var command = new AddSubTaskCommand(request.ParentTaskId, subTask);
         var result = await mediator.Send(command);
 
-        return result.Match(_ => Ok(TaskCreatedResponse.FromTask(task)), Error);
+        return result.Match(_ => Ok(new TaskCreatedResponse(subTask.Id)), Error);
     }
 
     [HttpPatch]
@@ -58,7 +59,7 @@ public class TaskController(IMediator mediator) : ApiController
     }
 
     [HttpGet("{taskId:guid}")]
-    public async Task<ActionResult<TaskResult>> GetTask(GetTaskRequest request)
+    public async Task<ActionResult<Entity.Task>> GetTask(GetTaskRequest request)
     {
         var query = new GetTaskByIdQuery(request.TaskId);
         var result = await mediator.Send(query);
