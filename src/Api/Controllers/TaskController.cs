@@ -3,12 +3,14 @@ using Api.Dto.Responses.Task;
 using Application.Cqrs.Commands.Task;
 using Application.Cqrs.Queries.Task;
 using Application.Dto.Task;
-using Entity = Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Entity = Domain.Entities;
 
 namespace Api.Controllers;
 
+[Authorize]
 [Route("task")]
 public class TaskController(IMediator mediator) : ApiController
 {
