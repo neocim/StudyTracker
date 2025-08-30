@@ -6,13 +6,13 @@ public record SubTask(
     Guid Id,
     DateOnly BeginDate,
     DateOnly EndDate,
+    string Name,
     string? Description,
-    string? Name,
     bool? Success)
 {
     public Entity.Task ToTaskEntity(Guid ownerId)
     {
-        return new Entity.Task(Id, ownerId, BeginDate, EndDate, Description, Name,
+        return new Entity.Task(Id, ownerId, BeginDate, EndDate, Name, Description,
             Success);
     }
 }

@@ -8,7 +8,9 @@ public record AddSubTaskRequest
     [Required(ErrorMessage = "The ID of the main task is required")]
     public Guid ParentTaskId { get; set; }
 
-    public string? Name { get; set; }
+    [Required(ErrorMessage = "The name of the new subtask is required")]
+    public string Name { get; set; }
+
     public string? Description { get; set; }
     public bool? Success { get; set; }
 

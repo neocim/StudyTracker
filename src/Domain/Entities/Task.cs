@@ -14,11 +14,11 @@ public class Task : Entity
     public DateOnly EndDate { get; set; }
 
     public Task(Guid id, Guid ownerId, DateOnly beginDate,
-        DateOnly endDate, string? description = null, string? name = null,
+        DateOnly endDate, string name, string? description = null,
         bool? success = null) : base(id)
     {
         OwnerId = ownerId;
-        Name = name ?? RandomName(7);
+        Name = name;
         Description = description;
         Success = success;
         BeginDate = beginDate;

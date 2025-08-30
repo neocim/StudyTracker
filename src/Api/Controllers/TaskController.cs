@@ -16,8 +16,8 @@ public class TaskController(IMediator mediator) : ApiController
     public async Task<ActionResult<TaskCreatedResponse>> NewTask(NewTaskRequest request)
     {
         var task = new Entity.Task(Guid.NewGuid(), request.OwnerId, request.BeginDate,
-            request.EndDate,
-            request.Description, request.Name, request.Success);
+            request.EndDate, request.Name,
+            request.Description, request.Success);
 
         var command = new AddNewTaskCommand(task);
         var result = await mediator.Send(command);
@@ -30,8 +30,8 @@ public class TaskController(IMediator mediator) : ApiController
         AddSubTaskRequest request)
     {
         var subTask = new SubTask(Guid.NewGuid(), request.BeginDate,
-            request.EndDate,
-            request.Description, request.Name, request.Success);
+            request.EndDate, request.Name,
+            request.Description, request.Success);
 
         var command = new AddSubTaskCommand(request.ParentTaskId, subTask);
         var result = await mediator.Send(command);

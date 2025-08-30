@@ -8,7 +8,9 @@ public record NewTaskRequest
     [Required(ErrorMessage = "The ID of the user who will own the new task is required")]
     public Guid OwnerId { get; set; }
 
-    public string? Name { get; set; }
+    [Required(ErrorMessage = "The name of the new task is required")]
+    public string Name { get; set; }
+
     public string? Description { get; set; }
     public bool? Success { get; set; }
 
