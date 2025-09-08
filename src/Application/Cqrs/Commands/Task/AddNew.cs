@@ -14,8 +14,12 @@ public class AddNewTaskCommandHandler(ITaskRepository taskRepository)
     public async Task<ErrorOr<Created>> Handle(AddNewTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var result = await taskRepository.AddAsync(request.Task);
+        if (await taskRepository.GetByIdAsync(request.Task.Id) is not null)
+            return Error.Conflict(
+                description: $"Task with ID `{request.Task.Id}` is already exists");
 
-        return result;
+        await taskRepository.AddAsync(request.Task);
+
+        return Result.Created;
     }
 }
