@@ -1,9 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Api.Dto.Requests.Task;
 
-public record GetTaskRequest
-{
-    [Required(ErrorMessage = "Task ID is required to get the task")]
-    public Guid TaskId { get; set; }
-}
+// It's empty now, but it might come in handy in the future
+public record GetTaskRequest;

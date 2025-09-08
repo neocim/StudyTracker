@@ -1,11 +1,12 @@
 using Application.Dto.Task;
 using Application.Repositories;
+using Entity = Domain.Entities;
 using MediatR;
 using ErrorOr;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddSubTaskCommand(Guid ParentTaskId, SubTask SubTask)
+public record AddSubTaskCommand(SubTask SubTask)
     : IRequest<ErrorOr<Created>>;
 
 public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
@@ -14,13 +15,14 @@ public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
     public async Task<ErrorOr<Created>> Handle(AddSubTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var task = await taskRepository.GetByIdAsync(request.ParentTaskId);
+        var task = await taskRepository.GetByIdAsync(request.SubTask.ParentTaskId);
 
         if (task is null)
             return Error.NotFound(
-                description: $"Task with ID `{request.ParentTaskId}` doesn't exist");
+                description:
+                $"Task with ID `{request.SubTask.ParentTaskId}` doesn't exist");
 
-        task.AddSubTask(request.SubTask.ToTaskEntity(task.OwnerId));
+        task.AddSubTask(request.SubTask.ToTaskEntity());
         await taskRepository.UpdateAsync(task);
 
         return Result.Created;

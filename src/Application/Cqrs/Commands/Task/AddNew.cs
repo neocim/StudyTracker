@@ -14,7 +14,13 @@ public class AddNewTaskCommandHandler(ITaskRepository taskRepository)
     public async Task<ErrorOr<Created>> Handle(AddNewTaskCommand request,
         CancellationToken cancellationToken)
     {
-        await taskRepository.UpdateAsync(request.Task);
+        try
+        {
+            await taskRepository.AddAsync(request.Task);
+        }
+        catch (DbUpdateExpection ex)
+        {
+        }
 
         return Result.Created;
     }

@@ -1,9 +1,20 @@
+using Entity = Domain.Entities;
+
 namespace Api.Dto.Responses.Task;
 
-public record TaskCreatedResponse(Guid TaskId)
+public record TaskResponse(
+    Guid Id,
+    Guid OwnerId,
+    DateOnly BeginDate,
+    DateOnly EndDate,
+    string Name,
+    string? Description,
+    bool? Success)
 {
-    public static TaskCreatedResponse FromTaskEntity(Domain.Entities.Task task)
+    public static TaskResponse FromTaskEntity(Entity.Task task)
     {
-        return new TaskCreatedResponse(task.Id);
+        return new TaskResponse(task.Id, task.OwnerId, task.BeginDate,
+            task.EndDate, task.Name,
+            task.Description, task.Success);
     }
 }

@@ -11,61 +11,72 @@ using Entity = Domain.Entities;
 namespace Api.Controllers;
 
 [Authorize]
-[Route("task")]
-public class TaskController(IMediator mediator) : ApiController
+[Route("users/{userId:guid}")]
+public class TasksController(IMediator mediator) : ApiController
 {
-    [HttpPost]
-    public async Task<ActionResult<TaskCreatedResponse>> NewTask(NewTaskRequest request)
+    [HttpPost("tasks")]
+    public async Task<ActionResult<TaskResponse>> NewTask(Guid userId,
+        NewTaskRequest request)
     {
-        var task = new Entity.Task(Guid.NewGuid(), request.OwnerId, request.BeginDate,
+        var task = new Entity.Task(Guid.NewGuid(), userId, request.BeginDate,
             request.EndDate, request.Name,
             request.Description, request.Success);
 
         var command = new AddNewTaskCommand(task);
         var result = await mediator.Send(command);
 
-        return result.Match(_ => Ok(TaskCreatedResponse.FromTaskEntity(task)), Error);
+        var response = TaskResponse.FromTaskEntity(task);
+        var routeValues = new { taskId = task.Id, request = new GetTaskRequest() };
+
+        return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
+            Error);
     }
 
-    [HttpPost("subtask")]
-    public async Task<ActionResult<TaskCreatedResponse>> AddSubTask(
+    [HttpPost("tasks/{parentTaskId:guid}/subtask")]
+    public async Task<ActionResult<TaskResponse>> AddSubTask(Guid userId,
+        Guid parentTaskId,
         AddSubTaskRequest request)
     {
-        var subTask = new SubTask(Guid.NewGuid(), request.BeginDate,
+        var subTask = new SubTask(Guid.NewGuid(), parentTaskId, userId, request.BeginDate,
             request.EndDate, request.Name,
             request.Description, request.Success);
 
-        var command = new AddSubTaskCommand(request.ParentTaskId, subTask);
+        var command = new AddSubTaskCommand(subTask);
         var result = await mediator.Send(command);
 
-        return result.Match(_ => Ok(new TaskCreatedResponse(subTask.Id)), Error);
+        var response = TaskResponse.FromTaskEntity(subTask.ToTaskEntity());
+        var routeValues = new { taskId = subTask.Id, request = new GetTaskRequest() };
+
+        return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
+            Error);
     }
 
-    [HttpPatch]
-    public async Task<ActionResult> UpdateTask(UpdateTaskRequest request)
+    [HttpGet("tasks/{taskId:guid}")]
+    public async Task<ActionResult<Entity.Task>> GetTask(Guid taskId,
+        GetTaskRequest request)
     {
-        var command = new UpdateTaskCommand(request.TaskId, request.Success, request.Name,
+        var query = new GetTaskByIdQuery(taskId);
+        var result = await mediator.Send(query);
+
+        return result.Match(task => Ok(task), Error);
+    }
+
+    [HttpPatch("tasks/{taskId:guid}")]
+    public async Task<ActionResult> UpdateTask(Guid taskId, UpdateTaskRequest request)
+    {
+        var command = new UpdateTaskCommand(taskId, request.Success, request.Name,
             request.Description);
         var result = await mediator.Send(command);
 
         return result.Match(_ => Ok(), Error);
     }
 
-    [HttpDelete("{taskId:guid}")]
+    [HttpDelete("tasks/{taskId:guid}")]
     public async Task<ActionResult> DeleteTask(Guid taskId)
     {
         var command = new RemoveTaskCommand(taskId);
         var result = await mediator.Send(command);
 
         return result.Match(_ => Ok(), Error);
-    }
-
-    [HttpGet("{taskId:guid}")]
-    public async Task<ActionResult<Entity.Task>> GetTask(GetTaskRequest request)
-    {
-        var query = new GetTaskByIdQuery(request.TaskId);
-        var result = await mediator.Send(query);
-
-        return result.Match(task => Ok(task), Error);
     }
 }
