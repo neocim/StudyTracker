@@ -1,14 +1,34 @@
 using Application.Repositories;
+using ErrorOr;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Entity = Domain.Entities;
 
 namespace Infrastructure.Database.Repositories;
 
 public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRepository
 {
-    public async Task AddAsync(Entity.Task task)
+    public async Task<ErrorOr<Created>> AddAsync(Entity.Task task)
     {
         applicationDbContext.Add(task);
-        await applicationDbContext.SaveChangesAsync();
+
+        try
+        {
+            await applicationDbContext.SaveChangesAsync();
+        }
+        catch (DbUpdateException exception)
+        {
+            if (exception.InnerException is SqlException sqlException)
+                return sqlException.Number switch
+                {
+                    2601 | 2627 => Error.Conflict(
+                        description: $"Task with ID `{task.Id}` is already exists"),
+                    _ => Error.Unexpected(
+                        description: $"Database error: `{sqlException.Message}`")
+                };
+        }
+
+        return Result.Created;
     }
 
     public async Task UpdateAsync(Entity.Task task)

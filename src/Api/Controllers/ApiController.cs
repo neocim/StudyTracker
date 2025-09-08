@@ -13,7 +13,7 @@ public class ApiController : ControllerBase
         return Error(errors[0]);
     }
 
-    protected ObjectResult Error(Error error)
+    protected ActionResult Error(Error error)
     {
         return Problem(statusCode: error.Type switch
         {
