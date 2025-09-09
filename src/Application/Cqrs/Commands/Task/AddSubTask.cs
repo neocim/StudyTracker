@@ -1,5 +1,5 @@
 using Application.Dto.Task;
-using Domain.Repositories;
+using Application.Data;
 using MediatR;
 using ErrorOr;
 
@@ -8,13 +8,14 @@ namespace Application.Cqrs.Commands.Task;
 public record AddSubTaskCommand(SubTask SubTask)
     : IRequest<ErrorOr<Created>>;
 
-public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
+public class AddSubTaskCommandHandler(IDataContext dataContext)
     : IRequestHandler<AddSubTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(AddSubTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var task = await taskRepository.GetByIdAsync(request.SubTask.ParentTaskId);
+        var task =
+            await dataContext.TaskRepository.GetByIdAsync(request.SubTask.ParentTaskId);
 
         if (task is null)
             return Error.NotFound(
@@ -22,7 +23,8 @@ public class AddSubTaskCommandHandler(ITaskRepository taskRepository)
                 $"Task with ID `{request.SubTask.ParentTaskId}` doesn't exist");
 
         task.AddSubTask(request.SubTask.ToTaskEntity());
-        await taskRepository.UpdateAsync(task);
+        await dataContext.TaskRepository.Update(task);
+        await dataContext.SaveChangesAsync();
 
         return Result.Created;
     }
