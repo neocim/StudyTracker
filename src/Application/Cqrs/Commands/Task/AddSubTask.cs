@@ -1,6 +1,5 @@
 using Application.Dto.Task;
-using Application.Repositories;
-using Entity = Domain.Entities;
+using Domain.Repositories;
 using MediatR;
 using ErrorOr;
 

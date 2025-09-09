@@ -1,6 +1,6 @@
 using Entity = Domain.Entities;
 
-namespace Application.Repositories;
+namespace Domain.Repositories;
 
 public interface ITaskRepository
 {

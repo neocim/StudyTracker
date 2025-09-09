@@ -1,4 +1,4 @@
-using Application.Repositories;
+using Domain.Repositories;
 using Entity = Domain.Entities;
 using MediatR;
 using ErrorOr;
