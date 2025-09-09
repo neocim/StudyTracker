@@ -5,22 +5,25 @@ namespace Infrastructure.Database.Repositories;
 
 public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRepository
 {
-    public async Task AddAsync(Entity.Task task)
+    public ValueTask Add(Entity.Task task)
     {
         applicationDbContext.Add(task);
-        await applicationDbContext.SaveChangesAsync();
+
+        return ValueTask.CompletedTask;
     }
 
-    public async Task UpdateAsync(Entity.Task task)
+    public ValueTask Update(Entity.Task task)
     {
         applicationDbContext.Update(task);
-        await applicationDbContext.SaveChangesAsync();
+
+        return ValueTask.CompletedTask;
     }
 
-    public async Task RemoveAsync(Entity.Task task)
+    public ValueTask Remove(Entity.Task task)
     {
         applicationDbContext.Remove(task);
-        await applicationDbContext.SaveChangesAsync();
+
+        return ValueTask.CompletedTask;
     }
 
     public async Task<Entity.Task?> GetByIdAsync(Guid taskId)
