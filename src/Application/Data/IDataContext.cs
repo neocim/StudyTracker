@@ -7,5 +7,5 @@ public interface IDataContext
     public ITaskRepository TaskRepository { get; }
 
     public Task SaveChangesAsync();
-    public ITransaction BeginTransactionAsync();
+    public Task<ITransaction> BeginTransactionAsync();
 }
