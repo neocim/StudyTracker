@@ -1,5 +1,7 @@
+using Application.Data;
 using Domain.Repositories;
 using Infrastructure.Database;
+using Infrastructure.Database.Data;
 using Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,8 @@ public static class DependencyInjection
         );
 
         services.AddScoped<ITaskRepository, TaskRepository>();
+        services.AddScoped<ITransaction, Transaction>();
+        services.AddScoped<IDataContext, DataContext>();
 
         return services;
     }
