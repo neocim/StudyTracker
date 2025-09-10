@@ -10,12 +10,12 @@ public record UpdateTaskCommand(
     bool? Success,
     string? Name,
     string? Description)
-    : IRequest<ErrorOr<Success>>;
+    : IRequest<ErrorOr<Updated>>;
 
 public class UpdateTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
-    : IRequestHandler<UpdateTaskCommand, ErrorOr<Success>>
+    : IRequestHandler<UpdateTaskCommand, ErrorOr<Updated>>
 {
-    public async Task<ErrorOr<Success>> Handle(UpdateTaskCommand request,
+    public async Task<ErrorOr<Updated>> Handle(UpdateTaskCommand request,
         CancellationToken cancellationToken)
     {
         var task = await taskReader.GetByIdAsync(request.TaskId);
@@ -31,6 +31,6 @@ public class UpdateTaskCommandHandler(IDataContext dataContext, ITaskReader task
         await dataContext.TaskRepository.Update(task);
         await dataContext.SaveChangesAsync();
 
-        return Result.Success;
+        return Result.Updated;
     }
 }
