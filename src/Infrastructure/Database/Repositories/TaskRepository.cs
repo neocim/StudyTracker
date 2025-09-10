@@ -25,9 +25,4 @@ public class TaskRepository(ApplicationDbContext applicationDbContext) : ITaskRe
 
         return ValueTask.CompletedTask;
     }
-
-    public async Task<Entity.Task?> GetByIdAsync(Guid taskId)
-    {
-        return await applicationDbContext.FindAsync<Entity.Task>(taskId);
-    }
 }

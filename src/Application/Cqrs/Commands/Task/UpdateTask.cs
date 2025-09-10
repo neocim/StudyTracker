@@ -1,4 +1,5 @@
 using Application.Data;
+using Domain.Readers;
 using ErrorOr;
 using MediatR;
 
@@ -11,13 +12,13 @@ public record UpdateTaskCommand(
     string? Description)
     : IRequest<ErrorOr<Success>>;
 
-public class UpdateTaskCommandHandler(IDataContext dataContext)
+public class UpdateTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
     : IRequestHandler<UpdateTaskCommand, ErrorOr<Success>>
 {
     public async Task<ErrorOr<Success>> Handle(UpdateTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var task = await dataContext.TaskRepository.GetByIdAsync(request.TaskId);
+        var task = await taskReader.GetByIdAsync(request.TaskId);
 
         if (task is null)
             return Error.NotFound(

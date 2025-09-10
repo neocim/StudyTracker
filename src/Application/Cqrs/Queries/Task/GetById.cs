@@ -1,4 +1,4 @@
-using Domain.Repositories;
+using Domain.Readers;
 using Entity = Domain.Entities;
 using MediatR;
 using ErrorOr;
@@ -7,13 +7,13 @@ namespace Application.Cqrs.Queries.Task;
 
 public record GetTaskByIdQuery(Guid TaskId) : IRequest<ErrorOr<Entity.Task>>;
 
-public class GetTaskByIdQueryHandler(ITaskRepository taskRepository)
+public class GetTaskByIdQueryHandler(ITaskReader taskReader)
     : IRequestHandler<GetTaskByIdQuery, ErrorOr<Entity.Task>>
 {
     public async Task<ErrorOr<Entity.Task>> Handle(GetTaskByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var task = await taskRepository.GetByIdAsync(request.TaskId);
+        var task = await taskReader.GetByIdAsync(request.TaskId);
 
         if (task is null)
             return Error.NotFound(
