@@ -1,7 +1,8 @@
 namespace Api.Dto.Responses.Task;
 
-public record TaskResponse(
+public record SubTaskResponse(
     Guid Id,
+    Guid ParentTaskId,
     Guid OwnerId,
     DateOnly BeginDate,
     DateOnly EndDate,

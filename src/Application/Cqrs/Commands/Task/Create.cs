@@ -6,7 +6,14 @@ using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddNewTaskCommand(Entity.Task Task)
+public record AddNewTaskCommand(
+    Guid Id,
+    Guid OwnerId,
+    DateOnly BeginDate,
+    DateOnly EndDate,
+    string Name,
+    string? Description,
+    bool? Success)
     : IRequest<ErrorOr<Created>>;
 
 public class AddNewTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
@@ -15,11 +22,13 @@ public class AddNewTaskCommandHandler(IDataContext dataContext, ITaskReader task
     public async Task<ErrorOr<Created>> Handle(AddNewTaskCommand request,
         CancellationToken cancellationToken)
     {
-        if (await taskReader.GetByIdAsync(request.Task.Id) is not null)
+        if (await taskReader.GetByIdAsync(request.Id) is not null)
             return Error.Conflict(
-                description: $"Task with ID `{request.Task.Id}` is already exists");
+                description: $"Task with ID `{request.Id}` is already exists");
 
-        await dataContext.TaskRepository.Add(request.Task);
+        await dataContext.TaskRepository.Add(new Entity.Task(request.Id, request.OwnerId,
+            request.BeginDate, request.EndDate, request.Name, request.Description,
+            request.Success));
         await dataContext.SaveChangesAsync();
 
         return Result.Created;

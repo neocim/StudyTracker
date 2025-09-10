@@ -1,16 +1,16 @@
+using Application.Dto.Task.ReadModels;
 using Domain.Readers;
-using Entity = Domain.Entities;
 using MediatR;
 using ErrorOr;
 
 namespace Application.Cqrs.Queries.Task;
 
-public record GetTaskByIdQuery(Guid TaskId) : IRequest<ErrorOr<Entity.Task>>;
+public record GetTaskByIdQuery(Guid TaskId) : IRequest<ErrorOr<TaskReadModel>>;
 
 public class GetTaskByIdQueryHandler(ITaskReader taskReader)
-    : IRequestHandler<GetTaskByIdQuery, ErrorOr<Entity.Task>>
+    : IRequestHandler<GetTaskByIdQuery, ErrorOr<TaskReadModel>>
 {
-    public async Task<ErrorOr<Entity.Task>> Handle(GetTaskByIdQuery request,
+    public async Task<ErrorOr<TaskReadModel>> Handle(GetTaskByIdQuery request,
         CancellationToken cancellationToken)
     {
         var task = await taskReader.GetByIdAsync(request.TaskId);

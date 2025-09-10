@@ -1,4 +1,4 @@
-using Application.Dto.Task;
+using Entity = Domain.Entities;
 using Application.Data;
 using Domain.Readers;
 using MediatR;
@@ -6,7 +6,15 @@ using ErrorOr;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddSubTaskCommand(SubTask SubTask)
+public record AddSubTaskCommand(
+    Guid Id,
+    Guid ParentTaskId,
+    Guid OwnerId,
+    DateOnly BeginDate,
+    DateOnly EndDate,
+    string Name,
+    string? Description,
+    bool? Success)
     : IRequest<ErrorOr<Created>>;
 
 public class AddSubTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
@@ -15,15 +23,16 @@ public class AddSubTaskCommandHandler(IDataContext dataContext, ITaskReader task
     public async Task<ErrorOr<Created>> Handle(AddSubTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var task =
-            await taskReader.GetByIdAsync(request.SubTask.ParentTaskId);
+        var task = await taskReader.GetByIdAsync(request.ParentTaskId);
 
         if (task is null)
             return Error.NotFound(
                 description:
-                $"Task with ID `{request.SubTask.ParentTaskId}` doesn't exist");
+                $"Task with ID `{request.ParentTaskId}` doesn't exist");
 
-        task.AddSubTask(request.SubTask.ToTaskEntity());
+        task.AddSubTask(new Entity.Task(request.Id, request.OwnerId,
+            request.BeginDate, request.EndDate, request.Name, request.Description,
+            request.Success));
         await dataContext.TaskRepository.Update(task);
         await dataContext.SaveChangesAsync();
 

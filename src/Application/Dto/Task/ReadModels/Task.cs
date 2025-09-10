@@ -1,6 +1,6 @@
-namespace Api.Dto.Responses.Task;
+namespace Application.Dto.Task.ReadModels;
 
-public record TaskResponse(
+public record TaskReadModel(
     Guid Id,
     Guid OwnerId,
     DateOnly BeginDate,

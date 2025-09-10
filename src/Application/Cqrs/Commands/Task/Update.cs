@@ -6,10 +6,10 @@ using MediatR;
 namespace Application.Cqrs.Commands.Task;
 
 public record UpdateTaskCommand(
-    Guid TaskId,
-    bool? Success,
+    Guid Id,
     string? Name,
-    string? Description)
+    string? Description,
+    bool? Success)
     : IRequest<ErrorOr<Updated>>;
 
 public class UpdateTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
@@ -18,11 +18,11 @@ public class UpdateTaskCommandHandler(IDataContext dataContext, ITaskReader task
     public async Task<ErrorOr<Updated>> Handle(UpdateTaskCommand request,
         CancellationToken cancellationToken)
     {
-        var task = await taskReader.GetByIdAsync(request.TaskId);
+        var task = await taskReader.GetByIdAsync(request.Id);
 
         if (task is null)
             return Error.NotFound(
-                description: $"Task with ID `{request.TaskId}` doesn't exist");
+                description: $"Task with ID `{request.Id}` doesn't exist");
 
         task.Success = request.Success ?? task.Success;
         task.Name = request.Name ?? task.Name;
