@@ -4,5 +4,5 @@ namespace Domain.Readers;
 
 public interface ITaskReader
 {
-    Task<Entity.Task?> GetByIdAsync(Guid taskId);
+    Task<Entity.Task> GetByIdAsync(Guid taskId);
 }

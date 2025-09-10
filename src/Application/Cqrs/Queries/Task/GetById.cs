@@ -1,4 +1,6 @@
 using Application.Dto.Task.ReadModels;
+using AutoMapper;
+using Entity = Domain.Entities;
 using Domain.Readers;
 using MediatR;
 using ErrorOr;
@@ -7,7 +9,7 @@ namespace Application.Cqrs.Queries.Task;
 
 public record GetTaskByIdQuery(Guid TaskId) : IRequest<ErrorOr<TaskReadModel>>;
 
-public class GetTaskByIdQueryHandler(ITaskReader taskReader)
+public class GetTaskByIdQueryHandler(ITaskReader taskReader, IMapper mapper)
     : IRequestHandler<GetTaskByIdQuery, ErrorOr<TaskReadModel>>
 {
     public async Task<ErrorOr<TaskReadModel>> Handle(GetTaskByIdQuery request,
@@ -19,6 +21,6 @@ public class GetTaskByIdQueryHandler(ITaskReader taskReader)
             return Error.NotFound(
                 description: $"Task with ID `{request.TaskId}` doesn't exist");
 
-        return task;
+        return mapper.Map<Entity.Task, TaskReadModel>(task);
     }
 }
