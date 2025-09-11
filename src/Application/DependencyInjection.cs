@@ -12,7 +12,7 @@ public static class DependencyInjection
         services.AddMediatR(options =>
             options.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
-        services.AddAutoMapper(options => { options.LoadProfilesFromAssemblies(); });
+        services.AddAutoMapper(options => { options.AddProfilesFromAssemblies(); });
 
         return services;
     }
@@ -28,7 +28,7 @@ public class ApplicationProfile : Profile
 
 public static class AutoMapperExtension
 {
-    public static void LoadProfilesFromAssemblies(
+    public static void AddProfilesFromAssemblies(
         this IMapperConfigurationExpression configuration)
     {
         foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
