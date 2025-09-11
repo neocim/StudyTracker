@@ -1,3 +1,6 @@
+using Api.Dto.Responses.Task;
+using Application.Dto.Task.ReadModels;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Api;
@@ -19,5 +22,13 @@ public static class DependencyInjection
         services.AddSwaggerGen();
 
         return services;
+    }
+}
+
+public class ApiProfile : Profile
+{
+    public ApiProfile()
+    {
+        CreateMap<TaskReadModel, TaskResponse>();
     }
 }

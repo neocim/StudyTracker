@@ -6,7 +6,7 @@ using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddNewTaskCommand(
+public record CreateTaskCommand(
     Guid Id,
     Guid OwnerId,
     DateOnly BeginDate,
@@ -16,10 +16,10 @@ public record AddNewTaskCommand(
     bool? Success)
     : IRequest<ErrorOr<Created>>;
 
-public class AddNewTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
-    : IRequestHandler<AddNewTaskCommand, ErrorOr<Created>>
+public class CreateTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
+    : IRequestHandler<CreateTaskCommand, ErrorOr<Created>>
 {
-    public async Task<ErrorOr<Created>> Handle(AddNewTaskCommand request,
+    public async Task<ErrorOr<Created>> Handle(CreateTaskCommand request,
         CancellationToken cancellationToken)
     {
         if (await taskReader.GetByIdAsync(request.Id) is not null)

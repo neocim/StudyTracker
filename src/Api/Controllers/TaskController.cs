@@ -2,6 +2,8 @@ using Api.Dto.Requests.Task;
 using Api.Dto.Responses.Task;
 using Application.Cqrs.Commands.Task;
 using Application.Cqrs.Queries.Task;
+using Application.Dto.Task.ReadModels;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +12,7 @@ namespace Api.Controllers;
 
 [Authorize]
 [Route("users/{userId:guid}")]
-public class TasksController(IMediator mediator) : ApiController
+public class TasksController(IMediator mediator, IMapper mapper) : ApiController
 {
     [HttpPost("tasks")]
     public async Task<ActionResult<TaskResponse>> NewTask(Guid userId,
@@ -18,13 +20,12 @@ public class TasksController(IMediator mediator) : ApiController
     {
         var taskId = Guid.NewGuid();
 
-        var command = new AddNewTaskCommand(taskId, userId, request.BeginDate,
+        var command = new CreateTaskCommand(taskId, userId, request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
         var result = await mediator.Send(command);
 
         var response = new TaskResponse(taskId, userId, request.BeginDate,
-            request.EndDate,
-            request.Name, request.Description, request.Success);
+            request.EndDate, request.Name, request.Description, request.Success);
         var routeValues = new { taskId, request = new GetTaskRequest() };
 
         return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
@@ -59,7 +60,8 @@ public class TasksController(IMediator mediator) : ApiController
         var query = new GetTaskByIdQuery(taskId);
         var result = await mediator.Send(query);
 
-        return result.Match(task => Ok(task), Error);
+        return result.Match(task => Ok(mapper.Map<TaskReadModel, TaskResponse>(task)),
+            Error);
     }
 
     [HttpPatch("tasks/{taskId:guid}")]

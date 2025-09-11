@@ -1,4 +1,5 @@
 using Application.Dto.Task.ReadModels;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Entity = Domain.Entities;
 
@@ -11,11 +12,32 @@ public static class DependencyInjection
         services.AddMediatR(options =>
             options.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
-        services.AddAutoMapper(options =>
-        {
-            options.CreateMap<Entity.Task, TaskReadModel>();
-        });
+        services.AddAutoMapper(options => { options.LoadProfilesFromAssemblies(); });
 
         return services;
+    }
+}
+
+public class ApplicationProfile : Profile
+{
+    public ApplicationProfile()
+    {
+        CreateMap<Entity.Task, TaskReadModel>();
+    }
+}
+
+public static class AutoMapperExtension
+{
+    public static void LoadProfilesFromAssemblies(
+        this IMapperConfigurationExpression configuration)
+    {
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            var profiles =
+                assembly.ExportedTypes.Where(t => typeof(Profile).IsAssignableFrom(t))
+                    .Select(Activator.CreateInstance).OfType<Profile>();
+
+            configuration.AddProfiles(profiles);
+        }
     }
 }
