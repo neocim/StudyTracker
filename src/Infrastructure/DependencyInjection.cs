@@ -20,7 +20,6 @@ public static class DependencyInjection
 
         services.AddScoped<ITaskReader, TaskReader>();
         services.AddScoped<ITaskRepository, TaskRepository>();
-        services.AddScoped<ITransaction, Transaction>();
         services.AddScoped<IDataContext, DataContext>();
 
         return services;
