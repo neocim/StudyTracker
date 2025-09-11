@@ -18,9 +18,9 @@ public static class DependencyInjection
     }
 }
 
-public class ApplicationProfile : Profile
+public class ApplicationMapperProfile : Profile
 {
-    public ApplicationProfile()
+    public ApplicationMapperProfile()
     {
         CreateMap<Entity.Task, TaskReadModel>();
     }
