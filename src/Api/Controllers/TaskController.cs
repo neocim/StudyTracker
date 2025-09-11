@@ -1,5 +1,6 @@
 using Api.Dto.Requests.Task;
 using Api.Dto.Responses.Task;
+using Application.Authorization.Permissions;
 using Application.Cqrs.Commands.Task;
 using Application.Cqrs.Queries.Task;
 using Application.Dto.Task.ReadModels;
@@ -10,11 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[Authorize]
 [Route("users/{userId:guid}")]
 public class TasksController(IMediator mediator, IMapper mapper) : ApiController
 {
     [HttpPost("tasks")]
+    [Authorize(Policy = Permission.Task.CreateTask)]
     public async Task<ActionResult<TaskResponse>> NewTask(Guid userId,
         NewTaskRequest request)
     {
@@ -33,6 +34,7 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
     }
 
     [HttpPost("tasks/{parentTaskId:guid}/subtask")]
+    [Authorize(Policy = Permission.Task.CreateSubTask)]
     public async Task<ActionResult<SubTaskResponse>> AddSubTask(Guid userId,
         Guid parentTaskId,
         AddSubTaskRequest request)
@@ -54,6 +56,7 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
     }
 
     [HttpGet("tasks/{taskId:guid}")]
+    [Authorize(Policy = Permission.Task.Read)]
     public async Task<ActionResult<TaskResponse>> GetTask(Guid taskId,
         GetTaskRequest request)
     {
@@ -65,6 +68,7 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
     }
 
     [HttpPatch("tasks/{taskId:guid}")]
+    [Authorize(Policy = Permission.Task.Update)]
     public async Task<ActionResult> UpdateTask(Guid taskId, UpdateTaskRequest request)
     {
         var command = new UpdateTaskCommand(taskId, request.Name, request.Description,
@@ -75,6 +79,7 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
     }
 
     [HttpDelete("tasks/{taskId:guid}")]
+    [Authorize(Policy = Permission.Task.Delete)]
     public async Task<ActionResult> DeleteTask(Guid taskId)
     {
         var command = new RemoveTaskCommand(taskId);
