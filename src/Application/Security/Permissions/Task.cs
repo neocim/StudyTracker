@@ -1,6 +1,6 @@
 namespace Application.Security.Permissions;
 
-public partial class Permission
+public static partial class Permission
 {
     public static class Task
     {
