@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Application.Data;
 using Domain.Readers;
 using Domain.Repositories;
@@ -6,7 +7,6 @@ using Infrastructure.Database.Data;
 using Infrastructure.Database.Readers;
 using Infrastructure.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 using Application.Security;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,8 +21,8 @@ public static class DependencyInjection
     {
         services.AddHttpContextAccessor();
 
-        AddDatabase(services, configuration);
         AddAuthentication(services, configuration);
+        AddDatabase(services, configuration);
 
         return services;
     }
@@ -44,19 +44,25 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthentication(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var rsa = new RSACryptoServiceProvider();
-        rsa.FromXmlString(configuration["Auth0:SigningKey"]!);
+        var signingKey = new X509SecurityKey(X509CertificateLoader.LoadCertificate(
+            System.Text.Encoding.UTF8.GetBytes(
+                configuration["Auth0:SigningCertificate"]!)));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = $"https://{configuration["Auth0:Domain"]}/";
+                options.Authority = $"https://{configuration["Auth0:Domain"]}";
                 options.Audience = configuration["Auth0:Audience"];
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true, ValidateAudience = true,
+                    ValidateIssuer = true,
+                    ValidIssuer = $"https://{configuration["Auth0:Domain"]}",
+
+                    ValidateAudience = true,
+                    ValidAudience = configuration["Auth0:Audience"],
+
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new RsaSecurityKey(rsa)
+                    IssuerSigningKey = signingKey
                 };
             });
 
