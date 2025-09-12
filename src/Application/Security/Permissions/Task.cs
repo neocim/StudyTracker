@@ -1,4 +1,4 @@
-namespace Application.Authorization.Permissions;
+namespace Application.Security.Permissions;
 
 public partial class Permission
 {

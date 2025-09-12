@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Api.Dto;
 
-public class DateOnlyJsonConverter : JsonConverter<DateOnly>
+public sealed class DateOnlyJsonConverter : JsonConverter<DateOnly>
 {
     private const string DateFormat = "yyyy-MM-dd";
 
