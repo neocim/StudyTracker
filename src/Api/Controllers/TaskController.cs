@@ -14,7 +14,7 @@ namespace Api.Controllers;
 public class TasksController(IMediator mediator, IMapper mapper) : ApiController
 {
     [HttpPost("tasks")]
-    public async Task<ActionResult<TaskResponse>> NewTask(Guid userId,
+    public async Task<ActionResult<TaskResponse>> CreateTask(Guid userId,
         NewTaskRequest request)
     {
         var taskId = Guid.NewGuid();
@@ -32,13 +32,13 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
     }
 
     [HttpPost("tasks/{parentTaskId:guid}/subtask")]
-    public async Task<ActionResult<SubTaskResponse>> AddSubTask(Guid userId,
+    public async Task<ActionResult<SubTaskResponse>> CreateSubTask(Guid userId,
         Guid parentTaskId,
         AddSubTaskRequest request)
     {
         var taskId = Guid.NewGuid();
 
-        var command = new AddSubTaskCommand(taskId, parentTaskId, userId,
+        var command = new CreateSubTaskCommand(taskId, parentTaskId, userId,
             request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
         var result = await mediator.Send(command);

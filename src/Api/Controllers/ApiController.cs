@@ -13,12 +13,13 @@ public class ApiController : ControllerBase
         return Error(errors[0]);
     }
 
-    protected ActionResult Error(Error error)
+    private ActionResult Error(Error error)
     {
         return Problem(statusCode: error.Type switch
         {
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
             _ => StatusCodes.Status500InternalServerError
         }, title: error.Description);
     }

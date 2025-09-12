@@ -1,4 +1,6 @@
 using Application.Data;
+using Application.Security;
+using Application.Security.Permissions;
 using Domain.Readers;
 using ErrorOr;
 using MediatR;
@@ -12,12 +14,18 @@ public record UpdateTaskCommand(
     bool? Success)
     : IRequest<ErrorOr<Updated>>;
 
-public class UpdateTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
+public class UpdateTaskCommandHandler(
+    IDataContext dataContext,
+    ITaskReader taskReader,
+    ISecurityContext securityContext)
     : IRequestHandler<UpdateTaskCommand, ErrorOr<Updated>>
 {
     public async Task<ErrorOr<Updated>> Handle(UpdateTaskCommand request,
         CancellationToken cancellationToken)
     {
+        if (!securityContext.HasPermission(Permission.Task.Update))
+            return Error.Forbidden(description: "Access denied");
+
         var task = await taskReader.GetByIdAsync(request.Id);
 
         if (task is null)

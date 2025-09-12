@@ -1,12 +1,14 @@
 using Entity = Domain.Entities;
 using Application.Data;
+using Application.Security;
+using Application.Security.Permissions;
 using Domain.Readers;
 using MediatR;
 using ErrorOr;
 
 namespace Application.Cqrs.Commands.Task;
 
-public record AddSubTaskCommand(
+public record CreateSubTaskCommand(
     Guid Id,
     Guid ParentTaskId,
     Guid OwnerId,
@@ -17,12 +19,18 @@ public record AddSubTaskCommand(
     bool? Success)
     : IRequest<ErrorOr<Created>>;
 
-public class AddSubTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
-    : IRequestHandler<AddSubTaskCommand, ErrorOr<Created>>
+public class CreateSubTaskCommandHandler(
+    IDataContext dataContext,
+    ITaskReader taskReader,
+    ISecurityContext securityContext)
+    : IRequestHandler<CreateSubTaskCommand, ErrorOr<Created>>
 {
-    public async Task<ErrorOr<Created>> Handle(AddSubTaskCommand request,
+    public async Task<ErrorOr<Created>> Handle(CreateSubTaskCommand request,
         CancellationToken cancellationToken)
     {
+        if (!securityContext.HasPermission(Permission.Task.Create))
+            return Error.Forbidden(description: "Access denied");
+
         var task = await taskReader.GetByIdAsync(request.ParentTaskId);
 
         if (task is null)

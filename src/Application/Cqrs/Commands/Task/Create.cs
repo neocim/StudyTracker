@@ -1,4 +1,6 @@
 using Application.Data;
+using Application.Security;
+using Application.Security.Permissions;
 using Domain.Readers;
 using ErrorOr;
 using MediatR;
@@ -16,12 +18,18 @@ public record CreateTaskCommand(
     bool? Success)
     : IRequest<ErrorOr<Created>>;
 
-public class CreateTaskCommandHandler(IDataContext dataContext, ITaskReader taskReader)
+public class CreateTaskCommandHandler(
+    IDataContext dataContext,
+    ITaskReader taskReader,
+    ISecurityContext securityContext)
     : IRequestHandler<CreateTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(CreateTaskCommand request,
         CancellationToken cancellationToken)
     {
+        if (!securityContext.HasPermission(Permission.Task.Create))
+            return Error.Forbidden(description: "Access denied");
+
         if (await taskReader.GetByIdAsync(request.Id) is not null)
             return Error.Conflict(
                 description: $"Task with ID `{request.Id}` is already exists");
