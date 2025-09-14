@@ -12,6 +12,8 @@ var app = builder.Build();
 
 app.MapControllers();
 app.UseAuthorization();
+app.UseHttpsRedirection();
+
 
 if (app.Environment.IsDevelopment())
 {
