@@ -12,7 +12,7 @@ COPY ./src ./src
 
 RUN dotnet publish src/Api/Api.csproj -c Release --output publish/
 
-FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish ./
 ENTRYPOINT ["dotnet", "Api.dll"]

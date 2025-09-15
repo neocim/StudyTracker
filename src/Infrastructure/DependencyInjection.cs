@@ -1,4 +1,6 @@
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Application.Data;
 using Domain.Readers;
 using Domain.Repositories;
@@ -44,10 +46,6 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthentication(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var signingKey = new X509SecurityKey(X509CertificateLoader.LoadCertificate(
-            System.Text.Encoding.UTF8.GetBytes(
-                configuration["Auth:SigningCertificate"]!)));
-
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -62,7 +60,7 @@ public static class DependencyInjection
                     ValidAudience = configuration["Auth:Audience"],
 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = signingKey
+                    IssuerSigningKey = new X509SecurityKey(X509CertificateLoader)
                 };
             });
 
