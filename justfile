@@ -10,4 +10,4 @@ run-mgrt migrationName:
     dotnet-ef migrations add {{migrationName}} --project=src/Infrastructure/ --startup-project=src/Api/
 
 upd-db:
-    dotnet-ef database update --project=src/Api/
+    dotnet-ef database update --project=src/Infrastructure/

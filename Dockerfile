@@ -10,7 +10,7 @@ RUN dotnet restore src/Api/Api.csproj
 
 COPY ./src ./src
 
-RUN dotnet publish src/Api/Api.csproj -c Release --output publish/
+RUN dotnet publish src/Api/Api.csproj -c Release --output publish/ --no-restore
 
 FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
 WORKDIR /app
