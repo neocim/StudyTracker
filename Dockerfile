@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-COPY src/Api/Api.csproj src/Api
-COPY src/Application/Application.csproj src/Application
-COPY src/Domain/Domain.csproj src/Domain
-COPY src/Infrastructure/Infrastructure.csproj src/Infrastructure
+COPY src/Api/Api.csproj src/Api/
+COPY src/Application/Application.csproj src/Application/
+COPY src/Domain/Domain.csproj src/Domain/
+COPY src/Infrastructure/Infrastructure.csproj src/Infrastructure/
 
 RUN dotnet restore src/Api/Api.csproj
 

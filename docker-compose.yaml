@@ -1,22 +1,26 @@
 services:
   nginx:
     container_name: StudyTracker.Nginx
-    image: nginx:1.29.1
+    image: "nginx:1.29.1"
     ports:
       - "80:80"
+    networks:
+      - StudyTracker.Network
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    restart: "unless-stopped"
 
   api:
     container_name: StudyTracker.Api
     build:
       context: ./
+      dockerfile: Dockerfile
     expose:
       - "4000"
     ports:
       - "127.0.0.1:${API_PORT}:4000"
     networks:
-      - StudyTracker.Postgres.Network
+      - StudyTracker.Network
     logging:
       options:
         max-size: "50m"
@@ -26,13 +30,13 @@ services:
 
   db:
     container_name: StudyTracker.Postgres
-    image: postgres.17-alpine
+    image: "postgres:17-alpine"
     ports:
       - "127.0.0.1:${POSTGRES_PORT}:5432"
     volumes:
       - StudyTracker.Postgres.data:/var/lib/postgresql/data/:rw
     networks:
-      - StudyTracker.Postgres.Network
+      - StudyTracker.Network
     logging:
       options:
         max-size: "50m"
@@ -48,4 +52,4 @@ volumes:
   StudyTracker.Postgres.data: {}
 
 networks:
-  StudyTracker.Postgres.Network: {}
+  StudyTracker.Network: {}
