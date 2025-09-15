@@ -46,20 +46,20 @@ public static class DependencyInjection
     {
         var signingKey = new X509SecurityKey(X509CertificateLoader.LoadCertificate(
             System.Text.Encoding.UTF8.GetBytes(
-                configuration["Auth0:SigningCertificate"]!)));
+                configuration["Auth:SigningCertificate"]!)));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = $"https://{configuration["Auth0:Domain"]}";
-                options.Audience = configuration["Auth0:Audience"];
+                options.Authority = $"https://{configuration["Auth:Domain"]}";
+                options.Audience = configuration["Auth:Audience"];
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = $"https://{configuration["Auth0:Domain"]}",
+                    ValidIssuer = $"https://{configuration["Auth:Domain"]}",
 
                     ValidateAudience = true,
-                    ValidAudience = configuration["Auth0:Audience"],
+                    ValidAudience = configuration["Auth:Audience"],
 
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = signingKey
