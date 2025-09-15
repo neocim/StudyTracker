@@ -11,7 +11,7 @@ RUN dotnet restore src/Infrastructure/Infrastructure.csproj
 
 COPY ./src/Infrastructure ./src/Infrastructure
 
-RUN dotnet publish src/Infrastructure/Infrastructure.csproj -c Release --output publish/ --no-restore
+RUN dotnet publish src/Infrastructure/Infrastructure.csproj -c Release --output publish/
 
 FROM mcr.microsoft.com/dotnet/runtime:9.0 AS final
 WORKDIR /app
