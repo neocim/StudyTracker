@@ -8,7 +8,7 @@ COPY src/Infrastructure/Infrastructure.csproj src/Infrastructure/
 
 RUN dotnet restore src/Api/Api.csproj
 
-COPY ./src ./src
+COPY src ./src
 
 RUN dotnet publish src/Api/Api.csproj -c Release --output publish/
 
