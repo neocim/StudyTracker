@@ -26,9 +26,10 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
 
         var response = new TaskResponse(taskId, userId, request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
-        var routeValues = new { taskId, request = new GetTaskRequest() };
+        var routeValues = new { taskId };
 
-        return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
+        return result.Match(
+            _ => CreatedAtAction(nameof(GetTask), routeValues, response),
             Error);
     }
 
@@ -47,15 +48,15 @@ public class TasksController(IMediator mediator, IMapper mapper) : ApiController
         var response = new SubTaskResponse(taskId, userId, parentTaskId,
             request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
-        var routeValues = new { taskId, request = new GetTaskRequest() };
+        var routeValues = new { taskId };
 
-        return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
+        return result.Match(
+            _ => CreatedAtAction(nameof(GetTask), routeValues, response),
             Error);
     }
 
     [HttpGet("tasks/{taskId:guid}")]
-    public async Task<ActionResult<TaskResponse>> GetTask(Guid taskId,
-        GetTaskRequest request)
+    public async Task<ActionResult<TaskResponse>> GetTask(Guid taskId)
     {
         var query = new GetTaskByIdQuery(taskId);
         var result = await mediator.Send(query);
