@@ -1,6 +1,7 @@
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using Application.Data;
 using Domain.Readers;
 using Domain.Repositories;
@@ -60,12 +61,30 @@ public static class DependencyInjection
                     ValidAudience = configuration["Auth:Audience"],
 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new X509SecurityKey(X509CertificateLoader)
+                    IssuerSigningKey = X509SecurityKeyFromConfiguration(configuration),
+
+                    ValidateLifetime = true
                 };
             });
 
         services.AddScoped<ISecurityContext, SecurityContext>();
 
         return services;
+    }
+
+    private static X509SecurityKey X509SecurityKeyFromConfiguration(
+        IConfiguration configuration)
+    {
+        var cert = configuration["Auth:SigningCertificate"]!;
+
+        cert = cert
+            .Replace("-----BEGIN CERTIFICATE-----", string.Empty)
+            .Replace("-----END CERTIFICATE-----", string.Empty)
+            .Replace("\r", string.Empty)
+            .Replace("\n", string.Empty)
+            .Trim();
+
+        return new X509SecurityKey(
+            X509CertificateLoader.LoadCertificate(Convert.FromBase64String(cert)));
     }
 }
