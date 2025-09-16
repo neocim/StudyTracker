@@ -76,7 +76,6 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         var cert = configuration["Auth:SigningCertificate"]!;
-
         cert = cert
             .Replace("-----BEGIN CERTIFICATE-----", string.Empty)
             .Replace("-----END CERTIFICATE-----", string.Empty)

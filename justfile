@@ -1,4 +1,7 @@
-run-db:
+run:
+    docker-compose up
+
+dev-db:
     docker run --rm --name studyTrackerDb \
         -p 5432:5432 \
         -e POSTGRES_USER=admin \
@@ -6,8 +9,8 @@ run-db:
         -e POSTGRES_DB=db \
         postgres:17-alpine
 
-run-mgrt migrationName:
+migration-add migrationName:
     dotnet-ef migrations add {{migrationName}} --project=src/Infrastructure/ --startup-project=src/Api/
 
-upd-db:
+migrate:
     dotnet-ef database update --project=src/Infrastructure/
