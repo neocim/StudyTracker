@@ -23,10 +23,10 @@ migrate-with-env defaultConnection=env("ConnectionStrings__DefaultConnection"): 
     docker run \
         --network "studytracker_StudyTracker.Postgres.Network" \
         -e ConnectionStrings__DefaultConnection="{{defaultConnection}}" \
-        -it migrator \
+        -it studytracker-migrator \
         dotnet-ef database update \
         --project src/Infrastructure/ \
         --startup-project src/Api/ --no-build
 
 migrate-build:
-    docker build -f Migrator.Dockerfile . --rm -t migrator
+    docker build -f Migrator.Dockerfile . --rm -t studytracker-migrator
