@@ -5,6 +5,7 @@ using Application.Security.Permissions;
 using Domain.Readers;
 using MediatR;
 using ErrorOr;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Cqrs.Commands.Task;
 
@@ -22,7 +23,8 @@ public record CreateSubTaskCommand(
 public class CreateSubTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
-    ISecurityContext securityContext)
+    ISecurityContext securityContext,
+    ILogger logger)
     : IRequestHandler<CreateSubTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(CreateSubTaskCommand request,
@@ -42,7 +44,11 @@ public class CreateSubTaskCommandHandler(
             request.BeginDate, request.EndDate, request.Name, request.Description,
             request.Success));
         await dataContext.TaskRepository.Update(task);
+
         await dataContext.SaveChangesAsync();
+
+        logger.LogInformation(
+            $"User `{request.OwnerId}` created a subtask `{request.Id}` of the `{request.ParentTaskId}`");
 
         return Result.Created;
     }

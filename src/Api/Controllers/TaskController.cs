@@ -12,7 +12,8 @@ namespace Api.Controllers;
 
 [Authorize]
 [Route("users/{userId:guid}")]
-public class TasksController(IMediator mediator, IMapper mapper) : ApiController
+public class TasksController(IMediator mediator, IMapper mapper)
+    : ApiController
 {
     [HttpPost("tasks")]
     public async Task<ActionResult<TaskResponse>> CreateTask(Guid userId,

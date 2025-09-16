@@ -3,6 +3,10 @@ using Application;
 using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 builder.Services
     .AddApi(builder.Configuration)
     .AddInfrastructure(builder.Configuration)

@@ -4,6 +4,7 @@ using Application.Security.Permissions;
 using Domain.Readers;
 using ErrorOr;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Cqrs.Commands.Task;
 
@@ -17,7 +18,8 @@ public record UpdateTaskCommand(
 public class UpdateTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
-    ISecurityContext securityContext)
+    ISecurityContext securityContext,
+    ILogger logger)
     : IRequestHandler<UpdateTaskCommand, ErrorOr<Updated>>
 {
     public async Task<ErrorOr<Updated>> Handle(UpdateTaskCommand request,
@@ -38,6 +40,8 @@ public class UpdateTaskCommandHandler(
 
         await dataContext.TaskRepository.Update(task);
         await dataContext.SaveChangesAsync();
+
+        logger.LogInformation($"Task `{request.Id}` was updated");
 
         return Result.Updated;
     }

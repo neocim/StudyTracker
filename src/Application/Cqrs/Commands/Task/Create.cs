@@ -4,6 +4,7 @@ using Application.Security.Permissions;
 using Domain.Readers;
 using ErrorOr;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Entity = Domain.Entities;
 
 namespace Application.Cqrs.Commands.Task;
@@ -21,7 +22,8 @@ public record CreateTaskCommand(
 public class CreateTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
-    ISecurityContext securityContext)
+    ISecurityContext securityContext,
+    ILogger logger)
     : IRequestHandler<CreateTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(CreateTaskCommand request,
@@ -38,6 +40,8 @@ public class CreateTaskCommandHandler(
             request.BeginDate, request.EndDate, request.Name, request.Description,
             request.Success));
         await dataContext.SaveChangesAsync();
+
+        logger.LogInformation($"User `{request.OwnerId}` created a task `{request.Id}`");
 
         return Result.Created;
     }
