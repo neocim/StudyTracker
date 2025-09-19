@@ -26,5 +26,6 @@ public class ApplicationMapperProfile : Profile
     public ApplicationMapperProfile()
     {
         CreateMap<Entity.Task, TaskReadModel>();
+        CreateMap<Entity.Task, TaskNodeReadModel>();
     }
 }

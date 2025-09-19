@@ -9,7 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApi(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 

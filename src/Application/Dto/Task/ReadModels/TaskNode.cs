@@ -1,9 +1,10 @@
 namespace Application.Dto.Task.ReadModels;
 
-public record TaskReadModel(
+public record TaskNodeReadModel(
     Guid Id,
     Guid OwnerId,
     Guid? ParentId,
+    ICollection<TaskNodeReadModel> SubTasks,
     DateOnly BeginDate,
     DateOnly EndDate,
     string Name,

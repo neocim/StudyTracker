@@ -25,7 +25,7 @@ public class TasksController(IMediator mediator, IMapper mapper)
             request.EndDate, request.Name, request.Description, request.Success);
         var result = await mediator.Send(command);
 
-        var response = new TaskResponse(taskId, userId, request.BeginDate,
+        var response = new TaskResponse(taskId, userId, null, request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
         var routeValues = new { userId, taskId };
 
