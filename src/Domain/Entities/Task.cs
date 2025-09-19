@@ -3,6 +3,7 @@ namespace Domain.Entities;
 public class Task : Entity
 {
     public ICollection<Task> SubTasks { get; } = [];
+    public Task? Parent { get; set; }
 
     public Guid OwnerId { get; init; }
 
@@ -15,8 +16,9 @@ public class Task : Entity
 
     public Task(Guid id, Guid ownerId, DateOnly beginDate,
         DateOnly endDate, string name, string? description = null,
-        bool? success = null) : base(id)
+        bool? success = null, Task? parent = null) : base(id)
     {
+        Parent = parent;
         OwnerId = ownerId;
         Name = name;
         Description = description;
@@ -28,13 +30,5 @@ public class Task : Entity
     public void AddSubTask(Task subTask)
     {
         SubTasks.Add(subTask);
-    }
-
-    private static string RandomName(int length)
-    {
-        const string chars = "abcdefghijklmnopqrstuvwxyz1234567890";
-        var random = new Random();
-        return new string(Enumerable.Repeat(chars, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }

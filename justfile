@@ -4,14 +4,8 @@ run:
 run-build:
     docker-compose up --build
 
-dev-db:
-    docker run --rm \
-        --name studyTrackerDb \
-        -p 5432:5432 \
-        -e POSTGRES_USER=admin \
-        -e POSTGRES_PASSWORD=admin \
-        -e POSTGRES_DB=db \
-        postgres:17-alpine
+run-db:
+    docker-compose up db
 
 migration-add migrationName:
     dotnet-ef migrations add {{migrationName}} --project=src/Infrastructure/ --startup-project=src/Api/
@@ -19,7 +13,7 @@ migration-add migrationName:
 migrate:
     just -E=./.env migrate-with-env
 
-migrate-with-env defaultConnection=env("ConnectionStrings__DefaultConnection"): migrate-build
+migrate-with-env defaultConnection=env("CONNECTIONSTRINGS__DEFAULTCONNECTION"): migrate-build
     docker run \
         --network "studytracker_StudyTracker.Postgres.Network" \
         -e ConnectionStrings__DefaultConnection="{{defaultConnection}}" \

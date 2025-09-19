@@ -27,10 +27,9 @@ public class TasksController(IMediator mediator, IMapper mapper)
 
         var response = new TaskResponse(taskId, userId, request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
-        var routeValues = new { taskId };
+        var routeValues = new { userId, taskId };
 
-        return result.Match(
-            _ => CreatedAtAction(nameof(GetTask), routeValues, response),
+        return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
             Error);
     }
 
@@ -49,10 +48,9 @@ public class TasksController(IMediator mediator, IMapper mapper)
         var response = new SubTaskResponse(taskId, userId, parentTaskId,
             request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
-        var routeValues = new { taskId };
+        var routeValues = new { userId, taskId };
 
-        return result.Match(
-            _ => CreatedAtAction(nameof(GetTask), routeValues, response),
+        return result.Match(_ => CreatedAtAction(nameof(GetTask), routeValues, response),
             Error);
     }
 

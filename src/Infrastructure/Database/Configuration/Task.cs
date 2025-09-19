@@ -9,14 +9,15 @@ public class TaskConfiguration : IEntityTypeConfiguration<Entity.Task>
     public void Configure(EntityTypeBuilder<Entity.Task> builder)
     {
         builder.HasKey(task => task.Id);
+
         builder.Property(task => task.OwnerId).IsRequired();
         builder.HasIndex(task => task.OwnerId);
 
-        builder
-            .HasMany(task => task.SubTasks).WithOne()
-            .HasForeignKey("ParentTaskId")
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(task => task.Parent)
+            .WithMany(task => task.SubTasks)
+            .HasForeignKey(task => task.Parent!.Id)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired(false);
 
         builder.Property(task => task.Name);
         builder.Property(task => task.Description).HasDefaultValue(null);

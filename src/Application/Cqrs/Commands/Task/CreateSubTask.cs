@@ -24,7 +24,7 @@ public class CreateSubTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
     ISecurityContext securityContext,
-    ILogger logger)
+    ILogger<CreateSubTaskCommandHandler> logger)
     : IRequestHandler<CreateSubTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(CreateSubTaskCommand request,

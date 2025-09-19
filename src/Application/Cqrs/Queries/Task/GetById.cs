@@ -16,7 +16,7 @@ public class GetTaskByIdQueryHandler(
     ITaskReader taskReader,
     IMapper mapper,
     ISecurityContext securityContext,
-    ILogger logger)
+    ILogger<GetTaskByIdQueryHandler> logger)
     : IRequestHandler<GetTaskByIdQuery, ErrorOr<TaskReadModel>>
 {
     public async Task<ErrorOr<TaskReadModel>> Handle(GetTaskByIdQuery request,

@@ -23,7 +23,7 @@ public class CreateTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
     ISecurityContext securityContext,
-    ILogger logger)
+    ILogger<CreateTaskCommandHandler> logger)
     : IRequestHandler<CreateTaskCommand, ErrorOr<Created>>
 {
     public async Task<ErrorOr<Created>> Handle(CreateTaskCommand request,

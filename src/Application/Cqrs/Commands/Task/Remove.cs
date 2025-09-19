@@ -14,7 +14,7 @@ public class RemoveTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
     ISecurityContext securityContext,
-    ILogger logger)
+    ILogger<RemoveTaskCommandHandler> logger)
     : IRequestHandler<RemoveTaskCommand, ErrorOr<Deleted>>
 {
     public async Task<ErrorOr<Deleted>> Handle(RemoveTaskCommand request,

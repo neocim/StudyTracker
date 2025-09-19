@@ -19,7 +19,7 @@ public class UpdateTaskCommandHandler(
     IDataContext dataContext,
     ITaskReader taskReader,
     ISecurityContext securityContext,
-    ILogger logger)
+    ILogger<UpdateTaskCommandHandler> logger)
     : IRequestHandler<UpdateTaskCommand, ErrorOr<Updated>>
 {
     public async Task<ErrorOr<Updated>> Handle(UpdateTaskCommand request,
