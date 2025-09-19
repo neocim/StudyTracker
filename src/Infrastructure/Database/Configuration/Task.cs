@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Entity = Domain.Entities;
 
 namespace Infrastructure.Database.Configuration;
@@ -15,7 +16,7 @@ public class TaskConfiguration : IEntityTypeConfiguration<Entity.Task>
 
         builder.HasOne(task => task.Parent)
             .WithMany(task => task.SubTasks)
-            .HasForeignKey(task => task.Parent!.Id)
+            .HasForeignKey(task => task.ParentId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired(false);
 

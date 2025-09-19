@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Task = Domain.Entities.Task;
+using Entity = Domain.Entities;
 
 namespace Infrastructure.Database;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : DbContext(options)
 {
-    public DbSet<Task> Tasks { get; set; } = null!;
+    public DbSet<Entity.Task>? Tasks { get; set; } = null;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

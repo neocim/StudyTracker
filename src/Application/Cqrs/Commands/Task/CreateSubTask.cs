@@ -42,7 +42,7 @@ public class CreateSubTaskCommandHandler(
 
         task.AddSubTask(new Entity.Task(request.Id, request.OwnerId,
             request.BeginDate, request.EndDate, request.Name, request.Description,
-            request.Success));
+            request.Success, task));
         await dataContext.TaskRepository.Update(task);
 
         await dataContext.SaveChangesAsync();
