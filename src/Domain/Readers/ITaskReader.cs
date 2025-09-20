@@ -5,6 +5,6 @@ namespace Domain.Readers;
 public interface ITaskReader
 {
     Task<Entity.Task?> GetByIdAsync(Guid id);
-    IEnumerable<Entity.Task>? GetByUserId(Guid userId);
-    IEnumerable<Entity.Task>? GetSubTasksByParentId(Guid parentId);
+    Task<IEnumerable<Entity.Task>?> GetByUserIdAsync(Guid userId);
+    Task<IEnumerable<Entity.Task>?> GetSubTasksByParentIdAsync(Guid parentId);
 }

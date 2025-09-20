@@ -27,5 +27,6 @@ public class ApiMapperProfile : Profile
     public ApiMapperProfile()
     {
         CreateMap<TaskReadModel, TaskResponse>();
+        CreateMap<TaskNodeReadModel, TaskNodeResponse>();
     }
 }

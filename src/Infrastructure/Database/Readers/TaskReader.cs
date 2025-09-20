@@ -1,4 +1,5 @@
 using Domain.Readers;
+using Microsoft.EntityFrameworkCore;
 using Entity = Domain.Entities;
 
 namespace Infrastructure.Database.Readers;
@@ -10,15 +11,19 @@ public class TaskReader(ApplicationDbContext applicationDbContext) : ITaskReader
         return await applicationDbContext.FindAsync<Entity.Task>(id);
     }
 
-    public IEnumerable<Entity.Task>? GetByUserId(Guid userId)
+    public async Task<IEnumerable<Entity.Task>?> GetByUserIdAsync(Guid userId)
     {
-        return applicationDbContext.Tasks?.Select(task => task)
-            .Where(task => task.OwnerId == userId);
+        return await applicationDbContext.Tasks
+            .Select(task => task)
+            .Where(task => task.OwnerId == userId)
+            .ToListAsync();
     }
 
-    public IEnumerable<Entity.Task>? GetSubTasksByParentId(Guid parentId)
+    public async Task<IEnumerable<Entity.Task>?> GetSubTasksByParentIdAsync(Guid parentId)
     {
-        return applicationDbContext.Tasks?.Select(task => task)
-            .Where(task => task.ParentId == parentId);
+        return await applicationDbContext.Tasks
+            .Select(task => task)
+            .Where(task => task.ParentId == parentId)
+            .ToListAsync();
     }
 }

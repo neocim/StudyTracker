@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[Authorize]
 [Route("users/{userId:guid}")]
 public class TasksController(IMediator mediator, IMapper mapper)
     : ApiController
@@ -34,19 +33,18 @@ public class TasksController(IMediator mediator, IMapper mapper)
     }
 
     [HttpPost("tasks/{parentTaskId:guid}/subtask")]
-    public async Task<ActionResult<SubTaskResponse>> CreateSubTask(Guid userId,
+    public async Task<ActionResult<TaskResponse>> CreateSubTask(Guid userId,
         Guid parentTaskId,
         AddSubTaskRequest request)
     {
         var taskId = Guid.NewGuid();
 
         var command = new CreateSubTaskCommand(taskId, parentTaskId, userId,
-            request.BeginDate,
-            request.EndDate, request.Name, request.Description, request.Success);
+            request.BeginDate, request.EndDate, request.Name, request.Description,
+            request.Success);
         var result = await mediator.Send(command);
 
-        var response = new SubTaskResponse(taskId, userId, parentTaskId,
-            request.BeginDate,
+        var response = new TaskResponse(taskId, userId, parentTaskId, request.BeginDate,
             request.EndDate, request.Name, request.Description, request.Success);
         var routeValues = new { userId, taskId };
 
@@ -62,6 +60,18 @@ public class TasksController(IMediator mediator, IMapper mapper)
 
         return result.Match(task => Ok(mapper.Map<TaskReadModel, TaskResponse>(task)),
             Error);
+    }
+
+    [HttpGet("tasks")]
+    public async Task<ActionResult<IEnumerable<TaskNodeResponse>>> GetTasks(Guid userId)
+    {
+        var query = new GetTasksByUserIdQuery(userId);
+        var result = await mediator.Send(query);
+
+        return result.Match(
+            tasks => Ok(mapper
+                .Map<IEnumerable<TaskNodeReadModel>,
+                    IEnumerable<TaskNodeResponse>>(tasks!)), Error);
     }
 
     [HttpPatch("tasks/{taskId:guid}")]

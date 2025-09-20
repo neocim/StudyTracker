@@ -1,9 +1,10 @@
 namespace Api.Dto.Responses.Task;
 
-public record SubTaskResponse(
+public record TaskNodeResponse(
     Guid Id,
-    Guid ParentTaskId,
     Guid OwnerId,
+    Guid? ParentId,
+    ICollection<TaskNodeResponse>? SubTasks,
     DateOnly BeginDate,
     DateOnly EndDate,
     string Name,
