@@ -8,7 +8,11 @@ run-db:
     docker-compose up db
 
 migrations-add migrationName:
-    dotnet-ef migrations add {{migrationName}} --project=src/Infrastructure/ --startup-project=src/Api/ --namespace=Database/Migrations
+    dotnet-ef migrations add {{migrationName}} \
+    --project=src/Infrastructure/ \
+    --startup-project=src/Api/ \
+    --namespace=Database/Migrations \
+    --no-build
 
 migrations-rm:
     dotnet-ef migrations remove --project=src/Infrastructure/ --startup-project=src/Api/

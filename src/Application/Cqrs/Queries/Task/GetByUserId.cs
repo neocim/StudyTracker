@@ -11,16 +11,16 @@ using Entity = Domain.Entities;
 namespace Application.Cqrs.Queries.Task;
 
 public record GetTasksByUserIdQuery(Guid UserId)
-    : IRequest<ErrorOr<IEnumerable<TaskNodeReadModel>?>>;
+    : IRequest<ErrorOr<IEnumerable<TaskNodeReadModel>>>;
 
 public class GetTasksByUserIdQueryHandler(
     ITaskReader taskReader,
     IMapper mapper,
     ISecurityContext securityContext,
     ILogger<GetTasksByUserIdQueryHandler> logger)
-    : IRequestHandler<GetTasksByUserIdQuery, ErrorOr<IEnumerable<TaskNodeReadModel>?>>
+    : IRequestHandler<GetTasksByUserIdQuery, ErrorOr<IEnumerable<TaskNodeReadModel>>>
 {
-    public async Task<ErrorOr<IEnumerable<TaskNodeReadModel>?>> Handle(
+    public async Task<ErrorOr<IEnumerable<TaskNodeReadModel>>> Handle(
         GetTasksByUserIdQuery request,
         CancellationToken cancellationToken)
     {
@@ -29,14 +29,10 @@ public class GetTasksByUserIdQueryHandler(
 
         var tasks = await taskReader.GetByUserIdAsync(request.UserId);
 
-        if (tasks is null)
-            return Error.NotFound(
-                description: $"User with ID `{request.UserId}` has no tasks");
-
         logger.LogInformation($"User `{request.UserId}` gets the tasks");
 
         return mapper
             .Map<IEnumerable<Entity.Task>, IEnumerable<TaskNodeReadModel>>(tasks)
-            .ToErrorOr()!;
+            .ToErrorOr();
     }
 }

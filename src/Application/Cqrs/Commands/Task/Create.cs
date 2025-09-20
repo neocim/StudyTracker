@@ -39,6 +39,7 @@ public class CreateTaskCommandHandler(
         await dataContext.TaskRepository.Add(new Entity.Task(request.Id, request.OwnerId,
             request.BeginDate, request.EndDate, request.Name, request.Description,
             request.Success));
+
         await dataContext.SaveChangesAsync();
 
         logger.LogInformation($"User `{request.OwnerId}` created a task `{request.Id}`");

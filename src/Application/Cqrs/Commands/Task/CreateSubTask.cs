@@ -40,11 +40,11 @@ public class CreateSubTaskCommandHandler(
                 description:
                 $"Task with ID `{request.ParentTaskId}` doesn't exist");
 
-        task.AddSubTask(new Entity.Task(request.Id, request.OwnerId,
+        var subTask = new Entity.Task(request.Id, request.OwnerId,
             request.BeginDate, request.EndDate, request.Name, request.Description,
-            request.Success, task));
-        await dataContext.TaskRepository.Update(task);
+            request.Success, task);
 
+        await dataContext.TaskRepository.Add(subTask);
         await dataContext.SaveChangesAsync();
 
         logger.LogInformation(

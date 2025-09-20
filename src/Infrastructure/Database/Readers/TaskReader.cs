@@ -11,7 +11,7 @@ public class TaskReader(ApplicationDbContext applicationDbContext) : ITaskReader
         return await applicationDbContext.FindAsync<Entity.Task>(id);
     }
 
-    public async Task<IEnumerable<Entity.Task>?> GetByUserIdAsync(Guid userId)
+    public async Task<IEnumerable<Entity.Task>> GetByUserIdAsync(Guid userId)
     {
         return await applicationDbContext.Tasks
             .Select(task => task)
@@ -19,7 +19,7 @@ public class TaskReader(ApplicationDbContext applicationDbContext) : ITaskReader
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Entity.Task>?> GetSubTasksByParentIdAsync(Guid parentId)
+    public async Task<IEnumerable<Entity.Task>> GetSubTasksByParentIdAsync(Guid parentId)
     {
         return await applicationDbContext.Tasks
             .Select(task => task)
