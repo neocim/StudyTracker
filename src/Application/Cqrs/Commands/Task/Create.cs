@@ -32,6 +32,10 @@ public class CreateTaskCommandHandler(
         if (!securityContext.HasPermission(Permission.Task.Create))
             return Error.Forbidden(description: "Access denied");
 
+        if (request.BeginDate >= request.EndDate)
+            return Error.Validation(
+                description: $"`beginDate` should be less than `endDate`");
+
         if (await taskReader.GetByIdAsync(request.Id) is not null)
             return Error.Conflict(
                 description: $"Task with ID `{request.Id}` is already exists");

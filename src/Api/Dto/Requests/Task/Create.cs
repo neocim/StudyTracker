@@ -6,7 +6,7 @@ namespace Api.Dto.Requests.Task;
 public record NewTaskRequest
 {
     [Required(ErrorMessage = "The name of the new task is required")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
     public bool? Success { get; set; }

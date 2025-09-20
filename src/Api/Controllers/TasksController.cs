@@ -91,7 +91,7 @@ public class TasksController(IMediator mediator, IMapper mapper)
     public async Task<ActionResult> UpdateTask(Guid taskId, UpdateTaskRequest request)
     {
         var command = new UpdateTaskCommand(taskId, request.Name, request.Description,
-            request.Success);
+            request.Success, request.BeginDate, request.EndDate);
         var result = await mediator.Send(command);
 
         return result.Match(_ => NoContent(), Error);

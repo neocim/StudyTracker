@@ -33,6 +33,10 @@ public class CreateSubTaskCommandHandler(
         if (!securityContext.HasPermission(Permission.Task.Create))
             return Error.Forbidden(description: "Access denied");
 
+        if (request.BeginDate >= request.EndDate)
+            return Error.Validation(
+                description: $"`beginDate` should be less than `endDate`");
+
         var task = await taskReader.GetByIdAsync(request.ParentTaskId);
 
         if (task is null)
@@ -40,11 +44,10 @@ public class CreateSubTaskCommandHandler(
                 description:
                 $"Task with ID `{request.ParentTaskId}` doesn't exist");
 
-        var subTask = new Entity.Task(request.Id, request.OwnerId,
+        await dataContext.TaskRepository.Add(new Entity.Task(request.Id, request.OwnerId,
             request.BeginDate, request.EndDate, request.Name, request.Description,
-            request.Success, task);
+            request.Success, task));
 
-        await dataContext.TaskRepository.Add(subTask);
         await dataContext.SaveChangesAsync();
 
         logger.LogInformation(

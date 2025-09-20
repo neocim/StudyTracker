@@ -12,7 +12,9 @@ public record UpdateTaskCommand(
     Guid Id,
     string? Name,
     string? Description,
-    bool? Success)
+    bool? Success,
+    DateOnly? BeginDate,
+    DateOnly? EndDate)
     : IRequest<ErrorOr<Updated>>;
 
 public class UpdateTaskCommandHandler(
@@ -28,6 +30,10 @@ public class UpdateTaskCommandHandler(
         if (!securityContext.HasPermission(Permission.Task.Update))
             return Error.Forbidden(description: "Access denied");
 
+        if (request.BeginDate >= request.EndDate)
+            return Error.Validation(
+                description: $"`beginDate` should be less than `endDate`");
+
         var task = await taskReader.GetByIdAsync(request.Id);
 
         if (task is null)
@@ -37,6 +43,8 @@ public class UpdateTaskCommandHandler(
         task.Success = request.Success ?? task.Success;
         task.Name = request.Name ?? task.Name;
         task.Description = request.Description ?? task.Description;
+        task.BeginDate = request.BeginDate ?? task.BeginDate;
+        task.EndDate = request.EndDate ?? task.EndDate;
 
         await dataContext.TaskRepository.Update(task);
         await dataContext.SaveChangesAsync();
