@@ -4,8 +4,6 @@ WORKDIR /app
 COPY src/Api/Api.csproj src/Api/
 COPY src/Infrastructure/Infrastructure.csproj src/Infrastructure/
 
-RUN dotnet restore src/Infrastructure/Infrastructure.csproj
-
 COPY src/Api ./src/Api/
 COPY src/Infrastructure ./src/Infrastructure/
 
