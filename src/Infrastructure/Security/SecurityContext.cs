@@ -6,14 +6,13 @@ public class SecurityContext(IHttpContextAccessor httpContextAccessor) : ISecuri
 {
     public bool HasPermission(string permission)
     {
-        // var permissions = httpContextAccessor.HttpContext?.User.Claims
-        //     .Where(c => c.Type == "permission")
-        //     .Select(c => c.Value);
-        //
-        // if (permissions is not null)
-        //     return permissions.Contains(permission);
-        //
-        // return false;
-        return true;
+        var permissions = httpContextAccessor.HttpContext?.User.Claims
+            .Where(c => c.Type == "permission")
+            .Select(c => c.Value);
+
+        if (permissions is not null)
+            return permissions.Contains(permission);
+
+        return false;
     }
 }
