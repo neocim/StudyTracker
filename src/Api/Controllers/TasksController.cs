@@ -32,7 +32,7 @@ public class TasksController(IMediator mediator, IMapper mapper)
             Error);
     }
 
-    [HttpPost("tasks/{parentTaskId:guid}/subtask")]
+    [HttpPost("tasks/{parentTaskId:guid}/subtasks")]
     public async Task<ActionResult<TaskResponse>> CreateSubTask(Guid userId,
         Guid parentTaskId,
         AddSubTaskRequest request)
@@ -71,7 +71,20 @@ public class TasksController(IMediator mediator, IMapper mapper)
         return result.Match(
             tasks => Ok(mapper
                 .Map<IEnumerable<TaskNodeReadModel>,
-                    IEnumerable<TaskNodeResponse>>(tasks!)), Error);
+                    IEnumerable<TaskNodeResponse>>(tasks)), Error);
+    }
+
+    [HttpGet("tasks/{parentTaskId:guid}/subtasks")]
+    public async Task<ActionResult<IEnumerable<TaskNodeResponse>>> GetSubTasks(
+        Guid parentTaskId)
+    {
+        var query = new GetSubTasksByParentIdQuery(parentTaskId);
+        var result = await mediator.Send(query);
+
+        return result.Match(
+            tasks => Ok(mapper
+                .Map<IEnumerable<TaskNodeReadModel>,
+                    IEnumerable<TaskNodeResponse>>(tasks)), Error);
     }
 
     [HttpPatch("tasks/{taskId:guid}")]
