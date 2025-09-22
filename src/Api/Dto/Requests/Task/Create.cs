@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Api.Dto.Requests.Task;
 
-public record NewTaskRequest
+public record CreateTaskRequest
 {
     [Required(ErrorMessage = "The name of the new task is required")]
     public string Name { get; set; } = null!;

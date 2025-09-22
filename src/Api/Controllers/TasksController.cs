@@ -17,7 +17,7 @@ public class TasksController(IMediator mediator, IMapper mapper)
 {
     [HttpPost("tasks")]
     public async Task<ActionResult<TaskResponse>> CreateTask(Guid userId,
-        NewTaskRequest request)
+        CreateTaskRequest request)
     {
         var taskId = Guid.NewGuid();
 
@@ -36,7 +36,7 @@ public class TasksController(IMediator mediator, IMapper mapper)
     [HttpPost("tasks/{parentTaskId:guid}/subtasks")]
     public async Task<ActionResult<TaskResponse>> CreateSubTask(Guid userId,
         Guid parentTaskId,
-        AddSubTaskRequest request)
+        CreateSubTaskRequest request)
     {
         var taskId = Guid.NewGuid();
 

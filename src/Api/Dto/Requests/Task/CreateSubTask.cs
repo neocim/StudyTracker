@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Api.Dto.Requests.Task;
 
-public record AddSubTaskRequest
+public record CreateSubTaskRequest
 {
     [Required(ErrorMessage = "The name of the new subtask is required")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
     public bool? Success { get; set; }
