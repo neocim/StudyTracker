@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
+[Authorize]
 [Route("users/{userId:guid}")]
 public class TasksController(IMediator mediator, IMapper mapper)
     : ApiController
