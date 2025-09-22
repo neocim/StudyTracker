@@ -8,7 +8,6 @@ public record UpdateTaskRequest
     public string? Description { get; set; }
     public bool? Success { get; set; }
 
-
     [JsonConverter(typeof(DateOnlyJsonConverter))]
     public DateOnly? BeginDate { get; set; }
 
